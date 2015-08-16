@@ -2,3 +2,5 @@ scikit-learn
 pandas
 nltk
 mwparserfromhell
+pywikibase
+revscoring

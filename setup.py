@@ -9,26 +9,24 @@ def requirements(fname):
         yield line.strip()
 
 setup(
-    name = "wikiclass",
+    name = "wbvandalism",
     version = read('VERSION').strip(),
-    author = "Aaron Halfaker / Morten Warncke-Wang",
-    author_email = "ahalfaker@wikimedia.org",
-    description = ("A library for performing automatic detection of assessment classes of Wikipedia articles."),
+    author = "Amir Sarabadani",
+    author_email = "Ladsgroup@gmail.com",
+    description = ("A library for performing automatic detection of vandalism in Wikidata."),
     license = "MIT",
-    url = "https://github.com/halfak/Wiki-Class",
+    url = "https://github.com/Ladsgroup/wb-vandalism",
     packages = find_packages(),
     long_description = read('README.rst'),
     install_requires = requirements('requirements.txt'),
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 2 - Planning",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Topic :: Text Processing :: Linguistic",
-        "Topic :: Text Processing :: General",
         "Topic :: Utilities",
         "Topic :: Scientific/Engineering"
     ],
