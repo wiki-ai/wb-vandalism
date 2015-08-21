@@ -1,4 +1,4 @@
-from revscoring.datasources.item import item
+from wb_vandalism.datasources.parsed_revision_text import item
 from revscoring.features import Feature
 
 
