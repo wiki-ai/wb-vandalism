@@ -32,44 +32,41 @@ class DictDiffer(object):
         return set(o for o in self.intersect if self.past_dict[o] == self.current_dict[o])
 
 
-def process_added_sitelinks(current_item, past_item):
+def process_sitelinks(current_item, past_item):
     differ = DictDiffer(current_item.sitelinks, past_item.sitelinks)
-    return differ.added()
+    return differ
 
-added_sitelinks = Datasource("diff.added_sitelinks", process_added_sitelinks,
+sitelinks_differ = Datasource("diff.sitelinks_differ", process_sitelinks,
                              depends_on=[current_item, past_item])
 
-def process_removed_sitelinks(current_item, past_item):
-    differ = DictDiffer(current_item.sitelinks, past_item.sitelinks)
-    return differ.removed()
 
-removed_sitelinks = Datasource("diff.removed_sitelinks", process_removed_sitelinks,
-                               depends_on=[current_item, past_item])
-
-def process_changed_sitelinks(current_item, past_item):
-    differ = DictDiffer(current_item.sitelinks, past_item.sitelinks)
-    return differ.changed()
-
-changed_sitelinks = Datasource("diff.changed_sitelinks", process_changed_sitelinks,
-                               depends_on=[current_item, past_item])
-
-def process_added_labels(current_item, past_item):
+def process_labels(current_item, past_item):
     differ = DictDiffer(current_item.labels, past_item.labels)
-    return differ.added()
+    return differ
 
-added_labels = Datasource("diff.added_labels", process_added_labels,
+labels_differ = Datasource("diff.labels_differ", process_labels,
+                            depends_on=[current_item, past_item])
+
+
+def process_aliases(current_item, past_item):
+    differ = DictDiffer(current_item.aliases, past_item.aliases)
+    return differ
+
+aliases_differ = Datasource("diff.aliases_differ", process_aliases,
                           depends_on=[current_item, past_item])
 
-def process_removed_labels(current_item, past_item):
-    differ = DictDiffer(current_item.labels, past_item.labels)
-    return differ.removed()
 
-removed_labels = Datasource("diff.removed_labels", process_removed_labels,
-                            depends_on=[current_item, past_item])
+def process_descriptions(current_item, past_item):
+    differ = DictDiffer(current_item.descriptions, past_item.descriptions)
+    return differ
 
-def process_changed_labels(current_item, past_item):
-    differ = DictDiffer(current_item.labels, past_item.labels)
-    return differ.changed()
+descriptions_differ = Datasource("diff.descriptions_differ", process_descriptions,
+                          depends_on=[current_item, past_item])
 
-changed_labels = Datasource("diff.changed_labels", process_changed_labels,
-                            depends_on=[current_item, past_item])
+
+def process_claims(current_item, past_item):
+    differ = DictDiffer(current_item.claims, past_item.claims)
+    return differ
+
+claims_differ = Datasource("diff.claims_differ", process_claims,
+                          depends_on=[current_item, past_item])
