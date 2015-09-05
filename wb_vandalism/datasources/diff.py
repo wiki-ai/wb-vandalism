@@ -70,3 +70,50 @@ def process_claims(current_item, past_item):
 
 claims_differ = Datasource("diff.claims_differ", process_claims,
                           depends_on=[current_item, past_item])
+
+
+def process_added_claims(claims_differ, current_item, past_item):
+    added_claims = []
+    for p_number in claims_differ.added():
+        added_claims += claims_differ.added()[p_number]
+    for p_number in claims_differ.changed():
+        parent_guids = [claim.snak for claim in past_item.claims[p_number]]
+        for claim in current_item.claims[p_number]:
+            if claim.snak not in parent_guids:
+                added_claims.append(claim)
+
+    return added_claims
+
+added_claims = Datasource("diff.added_claims", process_added_claims,
+                          depends_on=[claims_differ, current_item, past_item])
+
+
+def process_removed_claims(claims_differ, current_item, past_item):
+    removed_claims = []
+    for p_number in claims_differ.removed():
+        removed_claims += claims_differ.removed()[p_number]
+    for p_number in claims_differ.changed():
+        current_guids = [claim.snak for claim in past_item.claims[p_number]]
+        for claim in past_item.claims[p_number]:
+                if claim.snak not in current_guids:
+                    removed_claims.append(claim)
+
+    return removed_claims
+
+removed_claims = Datasource("diff.removed_claims", process_removed_claims,
+                          depends_on=[claims_differ, current_item, past_item])
+
+
+def process_changed_claims(claims_differ, current_item, past_item):
+    changed_claims = []
+    for p_number in claims_differ.changed():
+        parent_guids = {claim.snak:claim for claim in past_item.claims[p_number]}
+        for claim in current_item.claims[p_number]:
+            if claim.snak in parent_guids and claim not in past_item.claims[p_number]:
+                changed_claims.append(tuple([parent_guids[claim.snak], claim]))
+
+    return changed_claims
+
+
+changed_claims = Datasource("diff.changed_claims", process_changed_claims,
+                          depends_on=[claims_differ, current_item, past_item])

@@ -1,6 +1,7 @@
 from wb_vandalism.datasources.diff import (
     sitelinks_differ, labels_differ, aliases_differ,
-    descriptions_differ, claims_differ)
+    descriptions_differ, claims_differ, added_claims,
+    removed_claims, changed_claims)
 from wb_vandalism.datasources import (
     parsed_parent_revision_text, parsed_revision_text)
 
@@ -92,4 +93,25 @@ def process_no_removed_aliases(aliases_differ, current_item, past_item):
 number_removed_aliases = Feature("number_removed_aliases", process_no_removed_aliases, returns=int,
                         depends_on=[aliases_differ, current_item, past_item])
 
-# There is no need for changed aliases,
+# There is no need for changed aliases.
+
+
+def process_no_added_claims(added_claims):
+    return len(added_claims)
+
+number_added_claims = Feature("number_added_claims", process_no_added_claims, returns=int,
+                        depends_on=[added_claims])
+
+
+def process_no_removed_claims(removed_claims):
+    return len(removed_claims)
+
+number_removed_claims = Feature("number_removed_claims", process_no_removed_claims, returns=int,
+                        depends_on=[removed_claims])
+
+
+def process_no_changed_claims(changed_claims):
+    return len(changed_claims)
+
+number_changed_claims = Feature("number_changed_claims", process_no_changed_claims, returns=int,
+                        depends_on=[changed_claims])
