@@ -117,3 +117,113 @@ def process_changed_claims(claims_differ, current_item, past_item):
 
 changed_claims = Datasource("diff.changed_claims", process_changed_claims,
                           depends_on=[claims_differ, current_item, past_item])
+
+def process_added_sources(changed_claims):
+    added_sources = []
+    for old_claim, new_claim in changed_claims:
+        parent_guids = []
+        for source in old_claim.sources:
+            for p_number in source:
+                parent_guids += [claim.hash for claim in source[p_number]]
+        for source in new_claim.sources:
+            for p_number in source:
+                for claim in source[p_number]:
+                    if claim.hash not in parent_guids:
+                        added_sources.append(claim)
+    return added_sources
+
+
+added_sources = Datasource("diff.added_sources", process_added_sources,
+                          depends_on=[changed_claims])
+
+
+def process_removed_sources(changed_claims):
+    removed_sources = []
+    for old_claim, new_claim in changed_claims:
+        current_guids = []
+        for source in new_claim.sources:
+            for p_number in source:
+                current_guids += [claim.hash for claim in source[p_number]]
+        for source in old_claim.sources:
+            for p_number in source:
+                for claim in source[p_number]:
+                    if claim.hash not in current_guids:
+                        removed_sources.append(claim)
+    return removed_sources
+
+
+removed_sources = Datasource("diff.removed_sources", process_removed_sources,
+                          depends_on=[changed_claims])
+
+def process_changed_sources(changed_claims):
+    changed_sources = {}
+    for old_claim, new_claim in changed_claims:
+        parent_guids = []
+        for source in old_claim.sources:
+            for p_number in source:
+                parent_guids.update({claim.hash:claim for claim in source[p_number]})
+        for source in new_claim.sources:
+            for p_number in source:
+                for claim in source[p_number]:
+                    if claim.hash in parent_guids:
+                        changed_sources.append(tuple([parent_guids[claim.hash], claim]))
+    return changed_sources
+
+
+changed_sources = Datasource("diff.changed_sources", process_changed_sources,
+                          depends_on=[changed_claims])
+
+def process_added_qualifiers(changed_claims):
+    added_qualifiers = []
+    for old_claim, new_claim in changed_claims:
+        parent_guids = []
+        for source in old_claim.qualifiers:
+            for p_number in source:
+                parent_guids += [claim.hash for claim in source[p_number]]
+        for source in new_claim.qualifiers:
+            for p_number in source:
+                for claim in source[p_number]:
+                    if claim.hash not in parent_guids:
+                        added_qualifiers.append(claim)
+    return added_qualifiers
+
+
+added_qualifiers = Datasource("diff.added_qualifiers", process_added_qualifiers,
+                          depends_on=[changed_claims])
+
+
+def process_removed_qualifiers(changed_claims):
+    removed_qualifiers = []
+    for old_claim, new_claim in changed_claims:
+        current_guids = []
+        for source in new_claim.qualifiers:
+            for p_number in source:
+                current_guids += [claim.hash for claim in source[p_number]]
+        for source in old_claim.qualifiers:
+            for p_number in source:
+                for claim in source[p_number]:
+                    if claim.hash not in current_guids:
+                        removed_qualifiers.append(claim)
+    return removed_qualifiers
+
+
+removed_qualifiers = Datasource("diff.removed_qualifiers", process_removed_qualifiers,
+                          depends_on=[changed_claims])
+
+def process_changed_qualifiers(changed_claims):
+    changed_qualifiers = {}
+    for old_claim, new_claim in changed_claims:
+        parent_guids = []
+        for source in old_claim.qualifiers:
+            for p_number in source:
+                parent_guids.update({claim.hash:claim for claim in source[p_number]})
+        for source in new_claim.qualifiers:
+            for p_number in source:
+                for claim in source[p_number]:
+                    if claim.hash in parent_guids:
+                        changed_qualifiers.append(tuple([parent_guids[claim.hash], claim]))
+    return changed_qualifiers
+
+
+changed_qualifiers = Datasource("diff.changed_qualifiers", process_changed_qualifiers,
+                          depends_on=[changed_claims])
