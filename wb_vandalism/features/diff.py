@@ -326,3 +326,15 @@ def process_proportion_of_langauge_added(current_item, past_item,
 proportion_of_langauge_added = Feature(
     "proportion_of_langauge_added", process_proportion_of_langauge_added,
     returns=float, depends_on=[current_item, past_item, language_regexes])
+
+
+def process_proportion_of_links_added(current_item, past_item):
+    re_qid = re.compile(r'https?\://|wwww\.')
+    current_item_res = len(re.findall(re_qid, str(current_item.toJSON())))
+    past_item_res = len(re.findall(re_qid, str(past_item.toJSON())))
+    return float(current_item_res - past_item_res) / \
+        float(current_item_res + 1)
+
+proportion_of_links_added = Feature(
+    "proportion_of_links_added", process_proportion_of_links_added,
+    returns=float, depends_on=[current_item, past_item])
