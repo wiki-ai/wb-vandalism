@@ -3,10 +3,6 @@ import unittest
 from revscoring.extractors import APIExtractor
 from mw.api import Session
 
-if __name__ == '__main__' and __package__ is None:
-    from os import sys, path
-    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-
 from wb_vandalism.features import revision
 extractor = APIExtractor(Session("https://www.wikidata.org/w/api.php"))
 
