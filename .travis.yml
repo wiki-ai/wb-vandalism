@@ -21,7 +21,7 @@ notifications:
     on_failure: always
   irc:
     channels:
-      - "chat.freenode.net#wiki-ai"
+      - "chat.freenode.net#wikimedia-ai"
     on_success: change
     on_failure: change
     template:
