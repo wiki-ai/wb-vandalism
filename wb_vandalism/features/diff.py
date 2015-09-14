@@ -27,7 +27,7 @@ number_added_sitelinks = Feature(
     depends_on=[sitelinks_differ])
 
 
-def process_no_removed_sitelinks(removed_sitelinks):
+def process_no_removed_sitelinks(sitelinks_differ):
     return len(sitelinks_differ.removed())
 
 number_removed_sitelinks = Feature(

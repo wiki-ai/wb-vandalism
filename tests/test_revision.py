@@ -7,7 +7,7 @@ from wb_vandalism.features import revision
 extractor = APIExtractor(Session("https://www.wikidata.org/w/api.php"))
 
 
-class TestFeatures(unittest.TestCase):
+class TestFeaturesRevision(unittest.TestCase):
 
     def test_claims(self):
         # Alan Turing, Turing Award
