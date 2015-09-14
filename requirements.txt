@@ -4,3 +4,4 @@ nltk
 mwparserfromhell
 pywikibase
 revscoring
+Levenshtein
