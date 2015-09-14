@@ -1,7 +1,3 @@
-scikit-learn
-pandas
-nltk
-mwparserfromhell
 pywikibase
 revscoring
 python-Levenshtein
