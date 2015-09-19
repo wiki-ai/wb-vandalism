@@ -72,6 +72,14 @@ claims_differ = Datasource("diff.claims_differ", process_claims,
                           depends_on=[current_item, past_item])
 
 
+def process_badges(current_item, past_item):
+    differ = DictDiffer(current_item.badges, past_item.badges)
+    return differ
+
+badges_differ = Datasource("diff.badges_differ", process_badges,
+                           depends_on=[current_item, past_item])
+
+
 def process_added_claims(claims_differ, current_item, past_item):
     added_claims = []
     for p_number in claims_differ.added():

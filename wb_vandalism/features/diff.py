@@ -1,6 +1,6 @@
 from wb_vandalism.datasources.diff import (
     sitelinks_differ, labels_differ, aliases_differ,
-    descriptions_differ, added_claims,
+    badges_differ, descriptions_differ, added_claims,
     removed_claims, changed_claims,
     added_sources, removed_sources, changed_sources,
     added_qualifiers, removed_qualifiers, changed_qualifiers)
@@ -94,7 +94,7 @@ number_changed_descriptions = Feature(
 def process_no_added_aliases(aliases_differ, current_item, past_item):
     no_added = 0
     for lang in aliases_differ.added():
-        no_added += len(aliases_differ.added()[lang])
+        no_added += len(current_item.aliases[lang])
     for lang in aliases_differ.changed():
         for alias in aliases_differ.changed()[lang]:
             if alias in current_item.aliases[alias] and alias not in \
@@ -110,7 +110,7 @@ number_added_aliases = Feature(
 def process_no_removed_aliases(aliases_differ, current_item, past_item):
     no_removed = 0
     for lang in aliases_differ.removed():
-        no_removed += len(aliases_differ.removed()[lang])
+        no_removed += len(past_item.aliases[lang])
     for lang in aliases_differ.changed():
         for alias in aliases_differ.changed()[lang]:
             if alias not in current_item.aliases[alias] and alias in \
@@ -232,6 +232,40 @@ def process_no_changed_qualifiers(changed_qualifiers):
 number_changed_qualifiers = Feature(
     "number_changed_qualifiers", process_no_changed_qualifiers, returns=int,
     depends_on=[changed_qualifiers])
+
+
+def process_no_added_badges(badges_differ, current_item, past_item):
+    no_added = 0
+    for lang in badges_differ.added():
+        no_added += len(current_item.badges[lang])
+    for lang in badges_differ.changed():
+        for badge in badges_differ.changed()[lang]:
+            if badge in current_item.badges[badge] and badge not in \
+                    past_item.badges[badge]:
+                no_added += 1
+    return no_added
+
+number_added_badges = Feature(
+    "number_added_badges", process_no_added_badges, returns=int,
+    depends_on=[badges_differ, current_item, past_item])
+
+
+def process_no_removed_badges(badges_differ, current_item, past_item):
+    no_removed = 0
+    for lang in badges_differ.removed():
+        no_removed += len(past_item.badges[lang])
+    for lang in badges_differ.changed():
+        for badge in badges_differ.changed()[lang]:
+            if badge not in current_item.badges[badge] and badge in \
+                    past_item.badges[lang]:
+                no_removed += 1
+    return no_removed
+
+number_removed_badges = Feature(
+    "number_removed_badges", process_no_removed_badges, returns=int,
+    depends_on=[badges_differ, current_item, past_item])
+
+# There is no need for changed badges.
 
 
 def process_mean_distance_desc(parent, current, differ):

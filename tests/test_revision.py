@@ -44,6 +44,10 @@ class TestFeaturesRevision(unittest.TestCase):
             240706544, [revision.number_sitelinks]))
         self.assertEqual(sitelinks[0], 134)
 
+    def test_badges(self):
+        badges = list(extractor.extract(
+            240706544, [revision.number_badges]))
+        self.assertEqual(badges[0], 4)
 
 if __name__ == '__main__':
     unittest.main()

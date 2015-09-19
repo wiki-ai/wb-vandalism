@@ -49,6 +49,16 @@ number_qualifiers = Feature("number_qualifiers", process_no_qualifiers, returns=
                         depends_on=[item])
 
 
+def process_no_badges(item):
+    no_badges = 0
+    for wiki in item.badges:
+        no_badges += len(item.badges[wiki])
+    return no_badges
+
+number_badges = Feature("number_badges", process_no_badges, returns=int,
+                        depends_on=[item])
+
+
 def process_no_labels(item):
     return len(item.labels)
 
