@@ -1,0 +1,4 @@
+pywikibase
+revscoring
+python-Levenshtein
+codedev

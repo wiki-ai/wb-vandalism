@@ -6,10 +6,16 @@ python:
   - "3.5"
   - "3.5-dev" # 3.5 development branch
   - "nightly" # currently points to 3.6-dev
+virtualenv:
+  system_site_packages: true
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install: "pip install -r requirements-dev.txt"
+
 # command to run tests
-script: nosetests -v
+script: nosetests -v --with-coverage --cover-package=wb_vandalism
+
+after_success:
+  - codecov
 
 notifications:
   email:
