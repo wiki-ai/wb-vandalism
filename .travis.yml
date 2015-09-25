@@ -9,8 +9,8 @@ sudo: required
 
 before_install:
   - sudo apt-get update -qq
-  - travis_wait sudo apt-get install -qq scipy
   - sudo apt-get install -qq libatlas-dev libatlas-base-dev liblapack-dev gfortran
+  - travis_wait pip install scipy
 
 # command to install dependencies
 install: "pip install -r requirements-dev.txt"
