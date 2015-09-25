@@ -7,8 +7,9 @@ python:
 
 sudo: required
 
-virtualenv:
-  system_site_packages: true
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libatlas-dev libatlas-base-dev liblapack-dev gfortran
 
 # command to install dependencies
 install: "pip install -r requirements-dev.txt"
