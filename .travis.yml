@@ -1,13 +1,15 @@
 language: python
 python:
-  - "3.2"
-  - "3.3"
   - "3.4"
   - "3.5"
   - "3.5-dev" # 3.5 development branch
   - "nightly" # currently points to 3.6-dev
+
+sudo: required
+
 virtualenv:
   system_site_packages: true
+
 # command to install dependencies
 install: "pip install -r requirements-dev.txt"
 

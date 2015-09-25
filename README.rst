@@ -1,3 +1,7 @@
+.. image:: https://travis-ci.org/Ladsgroup/wb-vandalism.svg?branch=master
+    :target: https://travis-ci.org/Ladsgroup/wb-vandalism
+
+
 wb-wandalism: Wikidata anti-vandalism system
 ====================================================
 
