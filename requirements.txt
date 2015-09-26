@@ -1,3 +1,4 @@
 pywikibase
 revscoring
+mediawiki-utilities
 python-Levenshtein
