@@ -1,5 +1,5 @@
 pywikibase
 revscoring
-mediawiki-utilities
+mwapi
 python-Levenshtein
 codecov

@@ -1,7 +1,7 @@
 import unittest
 
 from revscoring.extractors import APIExtractor
-from mw.api import Session
+from mwapi import Session
 
 from wb_vandalism.features import revision
 extractor = APIExtractor(Session("https://www.wikidata.org/w/api.php"))
