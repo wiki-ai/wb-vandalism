@@ -96,9 +96,8 @@ def process_no_added_aliases(aliases_differ, current_item, past_item):
     for lang in aliases_differ.added():
         no_added += len(current_item.aliases[lang])
     for lang in aliases_differ.changed():
-        for alias in aliases_differ.changed()[lang]:
-            if alias in current_item.aliases[alias] and alias not in \
-                    past_item.aliases[lang]:
+        for alias in current_item.aliases[lang]:
+            if alias not in past_item.aliases[lang]:
                 no_added += 1
     return no_added
 
@@ -112,9 +111,8 @@ def process_no_removed_aliases(aliases_differ, current_item, past_item):
     for lang in aliases_differ.removed():
         no_removed += len(past_item.aliases[lang])
     for lang in aliases_differ.changed():
-        for alias in aliases_differ.changed()[lang]:
-            if alias not in current_item.aliases[alias] and alias in \
-                    past_item.aliases[lang]:
+        for alias in past_item.aliases[lang]:
+            if alias not in current_item.aliases[lang]:
                 no_removed += 1
     return no_removed
 

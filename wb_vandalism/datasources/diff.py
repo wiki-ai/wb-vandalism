@@ -99,7 +99,7 @@ added_claims = Datasource("diff.added_claims", process_added_claims,
 def process_removed_claims(claims_differ, current_item, past_item):
     removed_claims = []
     for p_number in claims_differ.removed():
-        removed_claims += claims_differ.removed()[p_number]
+        removed_claims += past_item.claims[p_number]
     for p_number in claims_differ.changed():
         current_guids = [claim.snak for claim in past_item.claims[p_number]]
         for claim in past_item.claims[p_number]:
