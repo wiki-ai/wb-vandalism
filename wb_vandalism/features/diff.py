@@ -200,14 +200,6 @@ number_removed_sources = Feature(
     depends_on=[removed_sources])
 
 
-def process_no_changed_sources(changed_sources):
-    return len(changed_sources)
-
-number_changed_sources = Feature(
-    "number_changed_sources", process_no_changed_sources, returns=int,
-    depends_on=[changed_sources])
-
-
 def process_no_added_qualifiers(added_qualifiers):
     return len(added_qualifiers)
 
@@ -222,14 +214,6 @@ def process_no_removed_qualifiers(removed_qualifiers):
 number_removed_qualifiers = Feature(
     "number_removed_qualifiers", process_no_removed_qualifiers, returns=int,
     depends_on=[removed_qualifiers])
-
-
-def process_no_changed_qualifiers(changed_qualifiers):
-    return len(changed_qualifiers)
-
-number_changed_qualifiers = Feature(
-    "number_changed_qualifiers", process_no_changed_qualifiers, returns=int,
-    depends_on=[changed_qualifiers])
 
 
 def process_no_added_badges(badges_differ, current_item, past_item):

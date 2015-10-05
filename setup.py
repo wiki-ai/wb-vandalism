@@ -8,9 +8,11 @@ def requirements(fname):
     for line in open(os.path.join(os.path.dirname(__file__), fname)):
         yield line.strip()
 
+version = "0.0.1"
+
 setup(
     name = "wbvandalism",
-    version = read('VERSION').strip(),
+    version = version,
     author = "Amir Sarabadani",
     author_email = "Ladsgroup@gmail.com",
     description = ("A library for performing automatic detection of vandalism in Wikidata."),

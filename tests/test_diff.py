@@ -111,7 +111,55 @@ class TestFeaturesDiff(unittest.TestCase):
         self.assertEqual(claims[3][1][1], 0)
         self.assertEqual(claims[3][1][2], 0)
 
+    def test_claims2(self):
+        claims = list(extractor.extract(
+            [202163969, 120548238, 254825767, 247168960],
+            [diff.number_changed_identifiers,
+             diff.P21_changed,
+             diff.P27_changed,
+             diff.P569_changed,
+             diff.P18_changed]))
+        self.assertEqual(claims[0][1][0], 1)
+        self.assertEqual(claims[1][1][0], 0)
+        self.assertEqual(claims[2][1][0], 0)
+        self.assertEqual(claims[3][1][0], 0)
 
+        self.assertTrue(claims[1][1][1])
+        self.assertFalse(claims[0][1][1])
+        self.assertFalse(claims[2][1][1])
+        self.assertFalse(claims[3][1][1])
+
+        self.assertTrue(claims[2][1][2])
+        self.assertFalse(claims[0][1][2])
+        self.assertFalse(claims[1][1][2])
+        self.assertFalse(claims[3][1][2])
+
+        self.assertTrue(claims[3][1][3])
+        self.assertFalse(claims[0][1][3])
+        self.assertFalse(claims[1][1][3])
+        self.assertFalse(claims[2][1][3])
+
+        self.assertTrue(claims[0][1][4])
+        self.assertFalse(claims[1][1][4])
+        self.assertFalse(claims[2][1][4])
+        self.assertFalse(claims[3][1][4])
+
+    def test_sources(self):
+        sources = list(extractor.extract(
+            [66760648, 254947152, 254947223, 254825767],
+            [diff.number_added_sources,
+             diff.number_removed_sources,]))
+        self.assertEqual(sources[0][1][0], 1)
+        self.assertEqual(sources[0][1][1], 0)
+
+        self.assertEqual(sources[1][1][0], 0)
+        self.assertEqual(sources[1][1][1], 1)
+
+        self.assertEqual(sources[2][1][0], 1)
+        self.assertEqual(sources[2][1][1], 1)
+
+        self.assertEqual(sources[3][1][0], 0)
+        self.assertEqual(sources[3][1][1], 0)
 
 if __name__ == '__main__':
     unittest.main()
