@@ -161,5 +161,57 @@ class TestFeaturesDiff(unittest.TestCase):
         self.assertEqual(sources[3][1][0], 0)
         self.assertEqual(sources[3][1][1], 0)
 
+    def test_qualifiers(self):
+        qualifiers = list(extractor.extract(
+            [247171078, 254967043, 254966946, 254825767],
+            [diff.number_added_qualifiers,
+             diff.number_removed_qualifiers,]))
+        self.assertEqual(qualifiers[0][1][0], 1)
+        self.assertEqual(qualifiers[0][1][1], 0)
+
+        self.assertEqual(qualifiers[1][1][0], 0)
+        self.assertEqual(qualifiers[1][1][1], 1)
+
+        self.assertEqual(qualifiers[2][1][0], 1)
+        self.assertEqual(qualifiers[2][1][1], 1)
+
+        self.assertEqual(qualifiers[3][1][0], 0)
+        self.assertEqual(qualifiers[3][1][1], 0)
+
+    def test_badges(self):
+        badges = list(extractor.extract(
+            [154279576, 254993634, 254987433, 236855267],
+            [diff.number_added_badges,
+             diff.number_removed_badges,]))
+        self.assertEqual(badges[0][1][0], 1)
+        self.assertEqual(badges[0][1][1], 0)
+
+        self.assertEqual(badges[1][1][0], 0)
+        self.assertEqual(badges[1][1][1], 1)
+
+        self.assertEqual(badges[2][1][0], 1)
+        self.assertEqual(badges[2][1][1], 1)
+
+        self.assertEqual(badges[3][1][0], 0)
+        self.assertEqual(badges[3][1][1], 0)
+
+    def test_mean_distance(self):
+        distances = list(extractor.extract(
+            [194250199, 190113221, 172464444, 88485789],
+            [diff.mean_distance_descriptions,
+             diff.mean_distance_labels]))
+        self.assertEqual(distances[0][1][0], 0)
+        self.assertEqual(distances[0][1][1], 0)
+
+        self.assertEqual(distances[1][1][0], 0.4736842105263158)
+        self.assertEqual(distances[1][1][1], 0)
+
+        self.assertEqual(distances[2][1][0], 0)
+        self.assertEqual(distances[2][1][1], 0)
+
+        self.assertEqual(distances[3][1][0], 0)
+        self.assertEqual(distances[3][1][1], 0.4545454545454546)
+
+
 if __name__ == '__main__':
     unittest.main()

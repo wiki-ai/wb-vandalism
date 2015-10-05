@@ -2,8 +2,8 @@ from wb_vandalism.datasources.diff import (
     sitelinks_differ, labels_differ, aliases_differ,
     badges_differ, descriptions_differ, added_claims,
     removed_claims, changed_claims,
-    added_sources, removed_sources, changed_sources,
-    added_qualifiers, removed_qualifiers, changed_qualifiers)
+    added_sources, removed_sources,
+    added_qualifiers, removed_qualifiers)
 from wb_vandalism.datasources import (
     parsed_parent_revision_text, parsed_revision_text)
 
@@ -221,9 +221,8 @@ def process_no_added_badges(badges_differ, current_item, past_item):
     for lang in badges_differ.added():
         no_added += len(current_item.badges[lang])
     for lang in badges_differ.changed():
-        for badge in badges_differ.changed()[lang]:
-            if badge in current_item.badges[badge] and badge not in \
-                    past_item.badges[badge]:
+        for badge in current_item.badges[lang]:
+            if badge not in past_item.badges[lang]:
                 no_added += 1
     return no_added
 
@@ -237,9 +236,8 @@ def process_no_removed_badges(badges_differ, current_item, past_item):
     for lang in badges_differ.removed():
         no_removed += len(past_item.badges[lang])
     for lang in badges_differ.changed():
-        for badge in badges_differ.changed()[lang]:
-            if badge not in current_item.badges[badge] and badge in \
-                    past_item.badges[lang]:
+        for badge in past_item.badges[lang]:
+            if badge not in current_item.badges[lang]:
                 no_removed += 1
     return no_removed
 
@@ -275,7 +273,7 @@ def process_mean_distance_labels(parent, current, differ):
     return distance / len(changed)
 
 mean_distance_labels = Feature(
-    "mean_distance_descriptions", process_mean_distance_labels, returns=float,
+    "mean_distance_labels", process_mean_distance_labels, returns=float,
     depends_on=[current_item, past_item, labels_differ])
 
 
