@@ -290,7 +290,7 @@ proportion_of_qid_added = Feature(
     depends_on=[current_item, past_item])
 
 # AF/8
-language_regexes = (r"(a(frikaa?ns|lbanian?|lemanha|ng(lais|ol)|ra?b(e?|"
+language_regexes = lambda: (r"(a(frikaa?ns|lbanian?|lemanha|ng(lais|ol)|ra?b(e?|"
                     r"[ei]c|ian?|isc?h)|rmenian?|ssamese|azeri|z[eə]rba"
                     r"(ijani?|ycan(ca)?|yjan)|нглийский)|b(ahasa( (indonesia|"
                     r"jawa|malaysia|melayu))?|angla|as(k|qu)e|[aeo]ng[ao]?li|"
