@@ -2,7 +2,6 @@ import re
 
 from Levenshtein import ratio
 from revscoring.features import Feature
-
 from wb_vandalism.datasources import (parsed_parent_revision_text,
                                       parsed_revision_text)
 from wb_vandalism.datasources.diff import (added_claims, added_qualifiers,
@@ -277,9 +276,10 @@ mean_distance_labels = Feature(
 
 
 def process_proportion_of_qid_added(current_item, past_item):
+    past_item_doc = past_item.toJSON() if past_item is not None else {}
     re_qid = re.compile(r'Q\d{1,8}')
     current_item_qids = len(re.findall(re_qid, str(current_item.toJSON())))
-    past_item_qids = len(re.findall(re_qid, str(past_item.toJSON())))
+    past_item_qids = len(re.findall(re_qid, str(past_item_doc)))
     return float(current_item_qids - past_item_qids) / \
         float(current_item_qids + 1)
 
@@ -328,9 +328,11 @@ LANGUAGE_REGEXES = (r"(a(frikaa?ns|lbanian?|lemanha|ng(lais|ol)|ra?b(e?|"
                     r"中文（(简体?|繁體)）|简体|繁體)")
 LANGUAGE_RE = re.compile(LANGUAGE_REGEXES)
 
+
 def process_proportion_of_langauge_added(current_item, past_item):
+    past_item_doc = past_item.toJSON() if past_item is not None else {}
     current_item_res = len(re.findall(LANGUAGE_RE, str(current_item.toJSON())))
-    past_item_res = len(re.findall(LANGUAGE_RE, str(past_item.toJSON())))
+    past_item_res = len(re.findall(LANGUAGE_RE, str(past_item_doc)))
     return float(current_item_res - past_item_res) / \
         float(current_item_res + 1)
 
@@ -341,9 +343,10 @@ proportion_of_langauge_added = Feature(
 
 
 def process_proportion_of_links_added(current_item, past_item):
+    past_item_doc = past_item.toJSON() if past_item is not None else {}
     re_qid = re.compile(r'https?\://|wwww\.')
     current_item_res = len(re.findall(re_qid, str(current_item.toJSON())))
-    past_item_res = len(re.findall(re_qid, str(past_item.toJSON())))
+    past_item_res = len(re.findall(re_qid, str(past_item_doc)))
     return float(current_item_res - past_item_res) / \
         float(current_item_res + 1)
 
