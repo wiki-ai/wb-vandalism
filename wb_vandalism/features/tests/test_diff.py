@@ -3,7 +3,6 @@ import pickle
 from mwapi import Session
 from nose.tools import eq_
 from revscoring.extractors import APIExtractor
-
 from wb_vandalism.features import diff
 
 extractor = APIExtractor(Session("https://www.wikidata.org/w/api.php"))
@@ -124,7 +123,7 @@ def test_aliases():
 
 def test_claims():
     claims = list(extractor.extract(
-        [247177183, 218756354, 247170322, 218755228],
+        [247177183, 218756354, 247170322, 218755228, 220328471],
         [diff.number_added_claims,
          diff.number_changed_claims,
          diff.number_removed_claims]))
@@ -143,6 +142,10 @@ def test_claims():
     eq_(claims[3][1][0], 0)
     eq_(claims[3][1][1], 0)
     eq_(claims[3][1][2], 0)
+
+    eq_(claims[4][1][0], 1)
+    eq_(claims[4][1][1], 0)
+    eq_(claims[4][1][2], 0)
 
     eq_(diff.number_added_claims,
         pickle.loads(pickle.dumps(diff.number_added_claims)))
