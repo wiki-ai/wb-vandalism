@@ -39,9 +39,10 @@ def test_sitelinks():
     eq_(diff.number_removed_sitelinks,
         pickle.loads(pickle.dumps(diff.number_removed_sitelinks)))
 
+
 def test_labels():
     labels = list(extractor.extract(
-        [122000849, 125669106, 218755228, 120548238],
+        [122000849, 125669106, 218755228, 120548238, 220328478],
         [diff.number_added_labels,
          diff.number_changed_labels,
          diff.number_removed_labels]))
@@ -61,6 +62,10 @@ def test_labels():
     eq_(labels[3][1][1], 0)
     eq_(labels[3][1][2], 0)
 
+    eq_(labels[4][1][0], 1)
+    eq_(labels[4][1][1], 0)
+    eq_(labels[4][1][2], 0)
+
     eq_(diff.number_added_labels,
         pickle.loads(pickle.dumps(diff.number_added_labels)))
 
@@ -69,6 +74,7 @@ def test_labels():
 
     eq_(diff.number_removed_labels,
         pickle.loads(pickle.dumps(diff.number_removed_labels)))
+
 
 def test_descriptions():
     descriptions = list(extractor.extract(
@@ -101,11 +107,12 @@ def test_descriptions():
     eq_(diff.number_removed_descriptions,
         pickle.loads(pickle.dumps(diff.number_removed_descriptions)))
 
+
 def test_aliases():
     aliases = list(extractor.extract(
         [310052, 254332219, 185753253],
         [diff.number_added_aliases,
-         diff.number_removed_aliases,]))
+         diff.number_removed_aliases]))
     eq_(aliases[0][1][0], 1)
     eq_(aliases[0][1][1], 0)
 
@@ -120,6 +127,7 @@ def test_aliases():
 
     eq_(diff.number_removed_aliases,
         pickle.loads(pickle.dumps(diff.number_removed_aliases)))
+
 
 def test_claims():
     claims = list(extractor.extract(
@@ -155,6 +163,7 @@ def test_claims():
 
     eq_(diff.number_removed_claims,
         pickle.loads(pickle.dumps(diff.number_removed_claims)))
+
 
 def test_claims2():
     claims = list(extractor.extract(

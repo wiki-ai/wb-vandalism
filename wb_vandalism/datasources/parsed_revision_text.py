@@ -1,5 +1,6 @@
-import pywikibase
 import json
+
+import pywikibase
 from revscoring.datasources import Datasource
 from revscoring.datasources.revision import text
 
@@ -10,4 +11,4 @@ def process_item(text):
     return item
 
 
-item = Datasource("parsed_revision_text.item", process_item, depends_on=[text])
+item = Datasource("parsed_revision.item", process_item, depends_on=[text])

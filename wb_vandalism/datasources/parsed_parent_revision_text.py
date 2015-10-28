@@ -14,4 +14,4 @@ def process_item(text):
         return item
 
 
-item = Datasource("item", process_item, depends_on=[text])
+item = Datasource("parsed_parent_revision.item", process_item, depends_on=[text])
