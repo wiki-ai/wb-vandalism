@@ -7,8 +7,12 @@
 
 wb-wandalism: Wikidata anti-vandalism system
 ============================================
+This library provides a set of utilities for building and maintaining
+edit quality prediction models for WikiBase wikis.
 
-WIP 
+* **Installation:** ``pip install wb-vandalism``
+* **Repository:** https://github.com/Ladsgroup/wb-vandalism
+* **License:** MIT
 
 **Compatible with Python 3.x only.**
 
