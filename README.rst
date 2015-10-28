@@ -1,8 +1,8 @@
-.. image:: https://travis-ci.org/Ladsgroup/wb-vandalism.svg?branch=master
-    :target: https://travis-ci.org/Ladsgroup/wb-vandalism
+.. image:: https://travis-ci.org/wiki-ai/wb-vandalism.svg?branch=master
+    :target: https://travis-ci.org/wiki-ai/wb-vandalism
 
-.. image:: http://codecov.io/github/Ladsgroup/wb-vandalism/coverage.svg?branch=master
-    :target: http://codecov.io/github/Ladsgroup/wb-vandalism?branch=master
+.. image:: http://codecov.io/github/wiki-ai/wb-vandalism/coverage.svg?branch=master
+    :target: http://codecov.io/github/wiki-ai/wb-vandalism?branch=master
 
 
 wb-wandalism: Wikidata anti-vandalism system
