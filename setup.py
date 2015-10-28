@@ -1,8 +1,11 @@
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
+
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 
 def requirements(fname):
     for line in open(os.path.join(os.path.dirname(__file__), fname)):
@@ -11,16 +14,16 @@ def requirements(fname):
 version = "0.0.1"
 
 setup(
-    name = "wbvandalism",
-    version = version,
-    author = "Amir Sarabadani",
-    author_email = "Ladsgroup@gmail.com",
-    description = ("A library for performing automatic detection of vandalism in Wikidata."),
-    license = "MIT",
-    url = "https://github.com/Ladsgroup/wb-vandalism",
-    packages = find_packages(),
-    long_description = read('README.rst'),
-    install_requires = requirements('requirements.txt'),
+    name="wb_vandalism",
+    version=version,
+    author="Amir Sarabadani",
+    author_email="Ladsgroup@gmail.com",
+    description=("A library for performing automatic detection of vandalism in Wikidata."),
+    license="MIT",
+    url="https://github.com/Ladsgroup/wb-vandalism",
+    packages=find_packages(),
+    long_description=read('README.rst'),
+    install_requires=requirements('requirements.txt'),
     classifiers=[
         "Development Status :: 2 - Planning",
         "Topic :: Software Development :: Libraries :: Python Modules",

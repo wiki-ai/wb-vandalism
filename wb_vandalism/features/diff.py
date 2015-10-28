@@ -1,19 +1,18 @@
-from wb_vandalism.datasources.diff import (
-    sitelinks_differ, labels_differ, aliases_differ,
-    badges_differ, descriptions_differ, added_claims,
-    removed_claims, changed_claims,
-    added_sources, removed_sources,
-    added_qualifiers, removed_qualifiers)
-from wb_vandalism.datasources import (
-    parsed_parent_revision_text, parsed_revision_text)
-
-from revscoring.features import Feature
-from .feature import has_property_changed
-
-from Levenshtein import ratio
-
 import re
 
+from Levenshtein import ratio
+from revscoring.features import Feature
+
+from wb_vandalism.datasources import (parsed_parent_revision_text,
+                                      parsed_revision_text)
+from wb_vandalism.datasources.diff import (added_claims, added_qualifiers,
+                                           added_sources, aliases_differ,
+                                           badges_differ, changed_claims,
+                                           descriptions_differ, labels_differ,
+                                           removed_claims, removed_qualifiers,
+                                           removed_sources, sitelinks_differ)
+
+from .feature import has_property_changed
 
 current_item = parsed_revision_text.item
 past_item = parsed_parent_revision_text.item
@@ -290,7 +289,7 @@ proportion_of_qid_added = Feature(
     depends_on=[current_item, past_item])
 
 # AF/8
-language_regexes = lambda: (r"(a(frikaa?ns|lbanian?|lemanha|ng(lais|ol)|ra?b(e?|"
+LANGUAGE_REGEXES = (r"(a(frikaa?ns|lbanian?|lemanha|ng(lais|ol)|ra?b(e?|"
                     r"[ei]c|ian?|isc?h)|rmenian?|ssamese|azeri|z[eə]rba"
                     r"(ijani?|ycan(ca)?|yjan)|нглийский)|b(ahasa( (indonesia|"
                     r"jawa|malaysia|melayu))?|angla|as(k|qu)e|[aeo]ng[ao]?li|"
@@ -318,28 +317,27 @@ language_regexes = lambda: (r"(a(frikaa?ns|lbanian?|lemanha|ng(lais|ol)|ra?b(e?|
                     r"rpski|venska|c?wedisc?h|hqip)|t(a(galog|mil)|elugu|"
                     r"hai(land)?|i[eế]ng vi[eệ]t|[uü]rk([cç]e|isc?h|iş|ey))|"
                     r"u(rdu|zbek)|v(alencia(no?)?|ietnamese)|welsh|(англиис|"
-                    r"[kк]алмыкс|[kк]азахс|немец|[pр]усс|[yу]збекс|татарс)кий"
-                    r"( язык)??|עברית|[kкқ](аза[кқ]ша|ыргызча|ирилл)|"
-                    r"українськ(а|ою)|б(еларуская|ългарски( език)?)|ελλ[ηι]"
+                    r"[kк]алмыкс|[kк]азахс|немец|[pр]усс|[yу]збекс|"
+                    r"татарс)кий( язык)??|עברית|[kкқ](аза[кқ]ша|ыргызча|"
+                    r"ирилл)|українськ(а|ою)|б(еларуская|"
+                    r"ългарски( език)?)|ελλ[ηι]"
                     r"νικ(ά|α)|ქართული|हिन्दी|ไทย|[mм]онгол(иа)?|([cс]рп|"
                     r"[mм]акедон)ски|العربية|日本語|한국(말|어)|‌हिनद़ि|"
                     r"বাংলা|ਪੰਜਾਬੀ|मराठी|ಕನ್ನಡ|اُردُو|தமிழ்|తెలుగు|ગુજરાતી|"
                     r"فارسی|پارسی|മലയാളം|پښتو|မြန်မာဘာသာ|中文(简体|繁體)?|"
                     r"中文（(简体?|繁體)）|简体|繁體)")
+LANGUAGE_RE = re.compile(LANGUAGE_REGEXES)
 
-
-def process_proportion_of_langauge_added(current_item, past_item,
-                                         language_regexes):
-    re_qid = re.compile(language_regexes)
-    current_item_res = len(re.findall(re_qid, str(current_item.toJSON())))
-    past_item_res = len(re.findall(re_qid, str(past_item.toJSON())))
+def process_proportion_of_langauge_added(current_item, past_item):
+    current_item_res = len(re.findall(LANGUAGE_RE, str(current_item.toJSON())))
+    past_item_res = len(re.findall(LANGUAGE_RE, str(past_item.toJSON())))
     return float(current_item_res - past_item_res) / \
         float(current_item_res + 1)
 
 # AF/38
 proportion_of_langauge_added = Feature(
     "proportion_of_langauge_added", process_proportion_of_langauge_added,
-    returns=float, depends_on=[current_item, past_item, language_regexes])
+    returns=float, depends_on=[current_item, past_item])
 
 
 def process_proportion_of_links_added(current_item, past_item):
