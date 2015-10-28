@@ -1,13 +1,17 @@
-import pywikibase
 import json
+
+import pywikibase
 from revscoring.datasources import Datasource
 from revscoring.datasources.parent_revision import text
 
 
 def process_item(text):
-    item = pywikibase.ItemPage()
-    item.get(content=json.loads(text))
-    return item
+    if text is None:
+        return None
+    else:
+        item = pywikibase.ItemPage()
+        item.get(content=json.loads(text))
+        return item
 
 
-item = Datasource("item", process_item, depends_on=[text])
+item = Datasource("parsed_parent_revision.item", process_item, depends_on=[text])
