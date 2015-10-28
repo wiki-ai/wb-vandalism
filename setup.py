@@ -23,7 +23,7 @@ setup(
     url="https://github.com/Ladsgroup/wb-vandalism",
     packages=find_packages(),
     long_description=read('README.rst'),
-    install_requires=requirements('requirements.txt'),
+    install_requires=list(requirements('requirements.txt')),
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Topic :: Software Development :: Libraries :: Python Modules",
