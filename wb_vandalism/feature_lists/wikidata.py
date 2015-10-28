@@ -73,4 +73,3 @@ reverted = [
     user.is_bot,
     user.is_anon,
 ]
-print(len(reverted))

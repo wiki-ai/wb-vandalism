@@ -11,7 +11,7 @@ def requirements(fname):
     for line in open(os.path.join(os.path.dirname(__file__), fname)):
         yield line.strip()
 
-version = "0.1.2"
+version = "0.1.3"
 
 setup(
     name="wb_vandalism",

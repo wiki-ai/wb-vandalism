@@ -83,7 +83,7 @@ badges_differ = Datasource("diff.badges_differ", process_badges,
 def process_added_claims(claims_differ, current_item, past_item):
     added_claims = []
     for p_number in claims_differ.added():
-        added_claims += claims_differ.added()[p_number]
+        added_claims += current_item.claims[p_number]
     for p_number in claims_differ.changed():
         parent_guids = [claim.snak for claim in past_item.claims[p_number]]
         for claim in current_item.claims[p_number]:
