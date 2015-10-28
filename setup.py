@@ -11,7 +11,7 @@ def requirements(fname):
     for line in open(os.path.join(os.path.dirname(__file__), fname)):
         yield line.strip()
 
-version = "0.0.1"
+version = "0.1.0"
 
 setup(
     name="wb_vandalism",
@@ -25,7 +25,7 @@ setup(
     long_description=read('README.rst'),
     install_requires=requirements('requirements.txt'),
     classifiers=[
-        "Development Status :: 2 - Planning",
+        "Development Status :: 3 - Alpha",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
