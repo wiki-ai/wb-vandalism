@@ -12,7 +12,7 @@ edit quality prediction models for WikiBase wikis.
 
 * **Installation:** ``pip install wb-vandalism``
 * **Repository:** https://github.com/Ladsgroup/wb-vandalism
-* **Report bugs:** [wb_vandalism @ phabricator](https://phabricator.wikimedia.org/maniphest/task/create/?projects=wb_vandalism)
+* **Report bugs:** `wb_vandalism @ phabricator <https://phabricator.wikimedia.org/maniphest/task/create/?projects=wb_vandalism>`_
 * **License:** MIT
 
 **Compatible with Python 3.x only.**
