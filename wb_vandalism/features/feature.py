@@ -1,8 +1,12 @@
 from revscoring.features.feature import Modifier
 from ..datasources import parsed_revision_text
 from ..datasources.diff import changed_claims
+from ..datasources.revision_metadata import comment
 
 from Levenshtein import ratio
+
+import re
+
 
 class has_property_value(Modifier):
     def __init__(self, property, value):
@@ -26,3 +30,14 @@ class has_property_changed(Modifier):
 
     def _process(self, changed_claims):
         return self.property in [claims[0].id for claims in changed_claims]
+
+
+class has_in_comment(Modifier):
+    def __init__(self, regex):
+        self.regex = regex
+        name = "has_in_comment({0})".format(repr(check))
+        super().__init__(name, self._process, returns=bool,
+                         depends_on=[comment])
+
+    def _process(self, comment):
+        return bool(re.match(self.regex, comment))
