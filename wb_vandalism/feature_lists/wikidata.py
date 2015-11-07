@@ -1,9 +1,73 @@
-import revscoring
+import revscoring.features.user
+from revscoring import Feature
 
-from revscoring.features import page, parent_revision, revision, user
-from revscoring.features.modifiers import log, max
+import pywikibase
 
 from ..features import diff, revision
+
+
+class properties:
+    """
+    Mapping of english descriptions to property identifiers
+    """
+    IMAGE = "P18"
+    SEX_OR_GENDER = "P21"
+    COUNTRY_OF_CITIZENSHIP = "P27"
+    INSTANCE_OF = "P31"
+    MEMBER_OF_SPORTS_TEAM = "P54"
+    SIGNATURE = "P109"
+    COMMONS_CATEGORY = "P373"
+    DATE_OF_BIRTH = "P569"
+    DATE_OF_DEATH = "P570"
+    OFFICIAL_WEBSITE = "P856"
+
+
+class items:
+    """
+    Mapping of english descriptions to item idenifiers
+    """
+    HUMAN = pywikibase.ItemPage('Q5')
+
+# Comment features
+is_client_delete = revision.comment_matches(r'^\/\* clientsitelink\-remove\:')
+is_merge_into = revision.comment_matches(r'^\/\* wbmergeitems\-to\:')
+is_merge_from = revision.comment_matches(r'^\/\* wbmergeitems\-from\:')
+is_revert = \
+    revision.comment_matches(r'^Reverted edits by \[\[Special\:Contributions')
+is_rollback = revision.comment_matches(r'^Undid revision ')
+is_restore = revision.comment_matches(r'^Restored revision ')
+is_item_creation = revision.comment_matches(r'^\/\* wbsetentity \*\/')
+
+# Properties change
+sex_or_gender_changed = \
+    diff.property_changed(properties.SEX_OR_GENDER,
+                          name="diff.sex_or_gender_changed")
+country_of_citizenship_changed = \
+    diff.property_changed(properties.COUNTRY_OF_CITIZENSHIP,
+                          name="diff.country_of_citizenship_changed")
+member_of_sports_team_changed = \
+    diff.property_changed(properties.MEMBER_OF_SPORTS_TEAM,
+                          name="diff.")
+date_of_birth_changed = \
+    diff.property_changed(properties.DATE_OF_BIRTH,
+                          name="diff.date_of_birth_changed")
+image_changed = \
+    diff.property_changed(properties.IMAGE,
+                          name="diff.image_changed")
+signature_changed = \
+    diff.property_changed(properties.SIGNATURE,
+                          name="diff.signature_changed")
+commons_category_changed = \
+    diff.property_changed(properties.COMMONS_CATEGORY,
+                          name="diff.commons_category_changed")
+official_website_changed = \
+    diff.property_changed(properties.OFFICIAL_WEBSITE,
+                          name="diff.official_website_changed")
+
+# Status
+is_human = revision.has_property_value(properties.INSTANCE_OF, items.HUMAN)
+is_blp = revision.has_property(items.DATE_OF_BIRTH) and not \
+         revision.has_property(items.DATE_OF_DEATH)
 
 
 reverted = [
@@ -70,6 +134,6 @@ reverted = [
     revision.number_descriptions,
     revision.is_human,
     revision.is_blp,
-    user.is_bot,
-    user.is_anon,
+    revscoring.features.user.is_bot,
+    revscoring.features.user.is_anon,
 ]
