@@ -3,7 +3,7 @@ import re
 from Levenshtein import ratio
 from revscoring.features import Feature
 from wb_vandalism.datasources import (parsed_parent_revision_text,
-                                      parsed_revision_text)
+                                      parsed_revision_text, revision_metadata)
 from wb_vandalism.datasources.diff import (added_claims, added_qualifiers,
                                            added_sources, aliases_differ,
                                            badges_differ, changed_claims,
@@ -11,7 +11,7 @@ from wb_vandalism.datasources.diff import (added_claims, added_qualifiers,
                                            removed_claims, removed_qualifiers,
                                            removed_sources, sitelinks_differ)
 
-from .feature import has_property_changed
+from .feature import has_property_changed, has_in_comment
 
 current_item = parsed_revision_text.item
 past_item = parsed_parent_revision_text.item
@@ -353,3 +353,17 @@ def process_proportion_of_links_added(current_item, past_item):
 proportion_of_links_added = Feature(
     "proportion_of_links_added", process_proportion_of_links_added,
     returns=float, depends_on=[current_item, past_item])
+
+is_client_delete = has_in_comment('^\/\* clientsitelink\-remove\:')
+
+is_merge_into = has_in_comment('^\/\* wbmergeitems\-to\:')
+
+is_merge_from = has_in_comment('^\/\* wbmergeitems\-from\:')
+
+is_revert = has_in_comment('^Reverted edits by \[\[Special\:Contributions')
+
+is_rollback = has_in_comment('^Undid revision ')
+
+is_restore = has_in_comment('^Restored revision ')
+
+is_item_creation = has_in_comment('^\/\* wbsetentity \*\/')
