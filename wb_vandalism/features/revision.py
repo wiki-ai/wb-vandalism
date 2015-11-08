@@ -1,7 +1,7 @@
 import re
 
 from revscoring.features import Feature
-from wb_vandalism.datasources.revision import item
+from wb_vandalism.datasources.revision import comment, item
 
 
 class comment_matches(Feature):
@@ -48,7 +48,6 @@ class has_property(Feature):
 
     def _process(self, item):
         return self.property in item.claims
-
 
 
 class has_property_value(Feature):
@@ -116,8 +115,8 @@ def process_no_qualifiers(item):
             no_qualifiers += len(claim.qualifiers)
     return no_qualifiers
 
-number_qualifiers = Feature("number_qualifiers", process_no_qualifiers, returns=int,
-                            depends_on=[item])
+number_qualifiers = Feature("number_qualifiers", process_no_qualifiers,
+                            returns=int, depends_on=[item])
 
 
 def process_no_badges(item):
@@ -140,12 +139,12 @@ number_labels = Feature("number_labels", process_no_labels, returns=int,
 def process_no_sitelinks(item):
     return len(item.sitelinks)
 
-number_sitelinks = Feature("number_sitelinks", process_no_sitelinks, returns=int,
-                           depends_on=[item])
+number_sitelinks = Feature("number_sitelinks", process_no_sitelinks,
+                           returns=int, depends_on=[item])
 
 
 def process_no_descriptions(item):
     return len(item.descriptions)
 
-number_descriptions = Feature("number_descriptions", process_no_descriptions, returns=int,
-                              depends_on=[item])
+number_descriptions = Feature("number_descriptions", process_no_descriptions,
+                              returns=int, depends_on=[item])

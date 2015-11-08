@@ -180,17 +180,12 @@ en_label_touched = Feature(
     depends_on=[diff.labels_differ])
 
 
-
-
-
-
-
 def process_no_added_sources(added_sources):
     return len(added_sources)
 
 number_added_sources = Feature(
     "number_added_sources", process_no_added_sources, returns=int,
-    depends_on=[added_sources])
+    depends_on=[diff.added_sources])
 
 
 def process_no_removed_sources(removed_sources):
@@ -198,7 +193,7 @@ def process_no_removed_sources(removed_sources):
 
 number_removed_sources = Feature(
     "number_removed_sources", process_no_removed_sources, returns=int,
-    depends_on=[removed_sources])
+    depends_on=[diff.removed_sources])
 
 
 def process_no_added_qualifiers(added_qualifiers):
@@ -206,7 +201,7 @@ def process_no_added_qualifiers(added_qualifiers):
 
 number_added_qualifiers = Feature(
     "number_added_qualifiers", process_no_added_qualifiers, returns=int,
-    depends_on=[added_qualifiers])
+    depends_on=[diff.added_qualifiers])
 
 
 def process_no_removed_qualifiers(removed_qualifiers):
@@ -214,7 +209,7 @@ def process_no_removed_qualifiers(removed_qualifiers):
 
 number_removed_qualifiers = Feature(
     "number_removed_qualifiers", process_no_removed_qualifiers, returns=int,
-    depends_on=[removed_qualifiers])
+    depends_on=[diff.removed_qualifiers])
 
 
 def process_no_added_badges(badges_differ, current_item, past_item):
@@ -229,7 +224,7 @@ def process_no_added_badges(badges_differ, current_item, past_item):
 
 number_added_badges = Feature(
     "number_added_badges", process_no_added_badges, returns=int,
-    depends_on=[badges_differ, current_item, past_item])
+    depends_on=[diff.badges_differ, current_item, past_item])
 
 
 def process_no_removed_badges(badges_differ, current_item, past_item):
@@ -244,7 +239,7 @@ def process_no_removed_badges(badges_differ, current_item, past_item):
 
 number_removed_badges = Feature(
     "number_removed_badges", process_no_removed_badges, returns=int,
-    depends_on=[badges_differ, current_item, past_item])
+    depends_on=[diff.badges_differ, current_item, past_item])
 
 # There is no need for changed badges.
 
@@ -261,7 +256,7 @@ def process_mean_distance_desc(parent, current, differ):
 
 mean_distance_descriptions = Feature(
     "mean_distance_descriptions", process_mean_distance_desc, returns=float,
-    depends_on=[past_item, current_item, descriptions_differ])
+    depends_on=[past_item, current_item, diff.descriptions_differ])
 
 
 def process_mean_distance_labels(parent, current, differ):
@@ -275,7 +270,7 @@ def process_mean_distance_labels(parent, current, differ):
 
 mean_distance_labels = Feature(
     "mean_distance_labels", process_mean_distance_labels, returns=float,
-    depends_on=[current_item, past_item, labels_differ])
+    depends_on=[current_item, past_item, diff.labels_differ])
 
 
 def process_proportion_of_qid_added(current_item, past_item):

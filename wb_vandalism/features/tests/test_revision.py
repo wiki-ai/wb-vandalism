@@ -3,29 +3,22 @@ import pickle
 from mwapi import Session
 from nose.tools import eq_
 from revscoring.extractors import APIExtractor
-
 from wb_vandalism.features import revision
 
 extractor = APIExtractor(Session("https://www.wikidata.org/w/api.php"))
 
 
 def test_claims():
-    # Alan Turing, Turing Award
-    human = list(extractor.extract([240706544, 248025762],
-                                   [revision.is_human]))
-    assert human[0][1][0]
-    assert not human[1][1][0]
+
     # Alan Turing, Aaron Halfaker
     features = list(extractor.extract(
         [240706544, 244168271],
-        [revision.is_blp, revision.number_claims]))
-    assert features[1][1][0]
-    assert not features[0][1][0]
-    eq_(features[0][1][1], 62)
-    eq_(features[1][1][1], 17)
+        [revision.number_claims]))
+    eq_(features[0][1][0], 62)
+    eq_(features[1][1][0], 17)
 
-    eq_(revision.is_human,
-        pickle.loads(pickle.dumps(revision.is_human)))
+    eq_(revision.number_claims,
+        pickle.loads(pickle.dumps(revision.number_claims)))
 
 
 def test_sources_and_qualifiers():

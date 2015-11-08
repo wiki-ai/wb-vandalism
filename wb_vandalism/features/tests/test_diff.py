@@ -168,50 +168,14 @@ def test_claims():
 def test_claims2():
     claims = list(extractor.extract(
         [202163969, 120548238, 254825767, 247168960],
-        [diff.number_changed_identifiers,
-         diff.P21_changed,
-         diff.P27_changed,
-         diff.P569_changed,
-         diff.P18_changed]))
+        [diff.number_changed_identifiers]))
     eq_(claims[0][1][0], 1)
     eq_(claims[1][1][0], 0)
     eq_(claims[2][1][0], 0)
     eq_(claims[3][1][0], 0)
 
-    assert claims[1][1][1]
-    assert not claims[0][1][1]
-    assert not claims[2][1][1]
-    assert not claims[3][1][1]
-
-    assert claims[2][1][2]
-    assert not claims[0][1][2]
-    assert not claims[1][1][2]
-    assert not claims[3][1][2]
-
-    assert claims[3][1][3]
-    assert not claims[0][1][3]
-    assert not claims[1][1][3]
-    assert not claims[2][1][3]
-
-    assert claims[0][1][4]
-    assert not claims[1][1][4]
-    assert not claims[2][1][4]
-    assert not claims[3][1][4]
-
     eq_(diff.number_changed_identifiers,
         pickle.loads(pickle.dumps(diff.number_changed_identifiers)))
-
-    eq_(diff.P21_changed,
-        pickle.loads(pickle.dumps(diff.P21_changed)))
-
-    eq_(diff.P27_changed,
-        pickle.loads(pickle.dumps(diff.P27_changed)))
-
-    eq_(diff.P569_changed,
-        pickle.loads(pickle.dumps(diff.P569_changed)))
-
-    eq_(diff.P18_changed,
-        pickle.loads(pickle.dumps(diff.P18_changed)))
 
 
 def test_sources():
