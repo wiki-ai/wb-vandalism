@@ -1,8 +1,6 @@
 from revscoring.features import user
 from revscoring.features.modifiers import not_
 
-import pywikibase
-
 from ..features import diff, revision
 
 
@@ -26,7 +24,7 @@ class items:
     """
     Mapping of english descriptions to item idenifiers
     """
-    HUMAN = pywikibase.ItemPage('Q5')
+    HUMAN = 'Q5'
 
 # Comment features
 is_client_delete = revision.comment_matches(r"^\/\* clientsitelink\-remove\:",
@@ -128,7 +126,7 @@ reverted = [
 #    diff.mean_distance_descriptions,
 #    diff.mean_distance_labels,
     diff.proportion_of_qid_added,
-    diff.proportion_of_langauge_added,
+    diff.proportion_of_language_added,
     diff.proportion_of_links_added,
     is_client_delete,
     is_merge_into,

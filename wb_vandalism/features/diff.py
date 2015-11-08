@@ -327,7 +327,7 @@ LANGUAGE_REGEXES = (r"(a(frikaa?ns|lbanian?|lemanha|ng(lais|ol)|ra?b(e?|"
 LANGUAGE_RE = re.compile(LANGUAGE_REGEXES)
 
 
-def process_proportion_of_langauge_added(current_item, past_item):
+def process_proportion_of_language_added(current_item, past_item):
     past_item_doc = past_item.toJSON() if past_item is not None else {}
     current_item_res = len(re.findall(LANGUAGE_RE, str(current_item.toJSON())))
     past_item_res = len(re.findall(LANGUAGE_RE, str(past_item_doc)))
@@ -335,8 +335,8 @@ def process_proportion_of_langauge_added(current_item, past_item):
         float(current_item_res + 1)
 
 # AF/38
-proportion_of_langauge_added = Feature(
-    "proportion_of_langauge_added", process_proportion_of_langauge_added,
+proportion_of_language_added = Feature(
+    "proportion_of_language_added", process_proportion_of_language_added,
     returns=float, depends_on=[current_item, past_item])
 
 
