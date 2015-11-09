@@ -2,19 +2,34 @@ import re
 
 from Levenshtein import ratio
 from revscoring.features import Feature
-from wb_vandalism.datasources import (parsed_parent_revision_text,
-                                      parsed_revision_text, revision_metadata)
-from wb_vandalism.datasources.diff import (added_claims, added_qualifiers,
-                                           added_sources, aliases_differ,
-                                           badges_differ, changed_claims,
-                                           descriptions_differ, labels_differ,
-                                           removed_claims, removed_qualifiers,
-                                           removed_sources, sitelinks_differ)
 
-from .feature import has_property_changed, has_in_comment
+from ..datasources import diff, parent_revision, revision
 
-current_item = parsed_revision_text.item
-past_item = parsed_parent_revision_text.item
+current_item = revision.item
+past_item = parent_revision.item
+
+
+class property_changed(Feature):
+    """
+    Returns True if a property has changed.
+
+    :Parameters:
+        property : `str`
+            The property name
+        name : `str`
+            A name to associate with the feature.  If not set, the feature's
+            name will be 'property_changed(<property>)'
+    """
+    def __init__(self, property, name=None):
+        self.property = property
+        if name is None:
+            name = "property_changed({0})".format(repr(property))
+
+        super().__init__(name, self._process, returns=bool,
+                         depends_on=[diff.changed_claims])
+
+    def _process(self, changed_claims):
+        return self.property in [claims[0].id for claims in changed_claims]
 
 
 def process_no_added_sitelinks(sitelinks_differ):
@@ -22,7 +37,7 @@ def process_no_added_sitelinks(sitelinks_differ):
 
 number_added_sitelinks = Feature(
     "number_added_sitelinks", process_no_added_sitelinks, returns=int,
-    depends_on=[sitelinks_differ])
+    depends_on=[diff.sitelinks_differ])
 
 
 def process_no_removed_sitelinks(sitelinks_differ):
@@ -30,7 +45,7 @@ def process_no_removed_sitelinks(sitelinks_differ):
 
 number_removed_sitelinks = Feature(
     "number_removed_sitelinks", process_no_removed_sitelinks, returns=int,
-    depends_on=[sitelinks_differ])
+    depends_on=[diff.sitelinks_differ])
 
 
 def process_no_changed_sitelinks(sitelinks_differ):
@@ -38,7 +53,7 @@ def process_no_changed_sitelinks(sitelinks_differ):
 
 number_changed_sitelinks = Feature(
     "number_changed_sitelinks", process_no_changed_sitelinks, returns=int,
-    depends_on=[sitelinks_differ])
+    depends_on=[diff.sitelinks_differ])
 
 
 def process_no_added_labels(labels_differ):
@@ -46,7 +61,7 @@ def process_no_added_labels(labels_differ):
 
 number_added_labels = Feature(
     "number_added_labels", process_no_added_labels, returns=int,
-    depends_on=[labels_differ])
+    depends_on=[diff.labels_differ])
 
 
 def process_no_removed_labels(labels_differ):
@@ -54,7 +69,7 @@ def process_no_removed_labels(labels_differ):
 
 number_removed_labels = Feature(
     "number_removed_labels", process_no_removed_labels, returns=int,
-    depends_on=[labels_differ])
+    depends_on=[diff.labels_differ])
 
 
 def process_no_changed_labels(labels_differ):
@@ -62,7 +77,7 @@ def process_no_changed_labels(labels_differ):
 
 number_changed_labels = Feature(
     "number_changed_labels", process_no_changed_labels, returns=int,
-    depends_on=[labels_differ])
+    depends_on=[diff.labels_differ])
 
 
 def process_no_added_descriptions(descriptions_differ):
@@ -70,7 +85,7 @@ def process_no_added_descriptions(descriptions_differ):
 
 number_added_descriptions = Feature(
     "number_added_descriptions", process_no_added_descriptions, returns=int,
-    depends_on=[descriptions_differ])
+    depends_on=[diff.descriptions_differ])
 
 
 def process_no_removed_descriptions(descriptions_differ):
@@ -78,7 +93,7 @@ def process_no_removed_descriptions(descriptions_differ):
 
 number_removed_descriptions = Feature(
     "number_removed_descriptions", process_no_removed_descriptions,
-    returns=int, depends_on=[descriptions_differ])
+    returns=int, depends_on=[diff.descriptions_differ])
 
 
 def process_no_changed_descriptions(descriptions_differ):
@@ -86,7 +101,7 @@ def process_no_changed_descriptions(descriptions_differ):
 
 number_changed_descriptions = Feature(
     "number_changed_descriptions", process_no_changed_descriptions,
-    returns=int, depends_on=[descriptions_differ])
+    returns=int, depends_on=[diff.descriptions_differ])
 
 
 def process_no_added_aliases(aliases_differ, current_item, past_item):
@@ -101,7 +116,7 @@ def process_no_added_aliases(aliases_differ, current_item, past_item):
 
 number_added_aliases = Feature(
     "number_added_aliases", process_no_added_aliases, returns=int,
-    depends_on=[aliases_differ, current_item, past_item])
+    depends_on=[diff.aliases_differ, current_item, past_item])
 
 
 def process_no_removed_aliases(aliases_differ, current_item, past_item):
@@ -116,7 +131,7 @@ def process_no_removed_aliases(aliases_differ, current_item, past_item):
 
 number_removed_aliases = Feature(
     "number_removed_aliases", process_no_removed_aliases, returns=int,
-    depends_on=[aliases_differ, current_item, past_item])
+    depends_on=[diff.aliases_differ, current_item, past_item])
 
 # There is no need for changed aliases.
 
@@ -126,7 +141,7 @@ def process_no_added_claims(added_claims):
 
 number_added_claims = Feature(
     "number_added_claims", process_no_added_claims, returns=int,
-    depends_on=[added_claims])
+    depends_on=[diff.added_claims])
 
 
 def process_no_removed_claims(removed_claims):
@@ -134,7 +149,7 @@ def process_no_removed_claims(removed_claims):
 
 number_removed_claims = Feature(
     "number_removed_claims", process_no_removed_claims, returns=int,
-    depends_on=[removed_claims])
+    depends_on=[diff.removed_claims])
 
 
 def process_no_changed_claims(changed_claims):
@@ -142,7 +157,7 @@ def process_no_changed_claims(changed_claims):
 
 number_changed_claims = Feature(
     "number_changed_claims", process_no_changed_claims, returns=int,
-    depends_on=[changed_claims])
+    depends_on=[diff.changed_claims])
 
 
 def process_no_changed_identifiers(changed_claims):
@@ -154,7 +169,7 @@ def process_no_changed_identifiers(changed_claims):
 
 number_changed_identifiers = Feature(
     "number_changed_identifiers", process_no_changed_identifiers, returns=int,
-    depends_on=[changed_claims])
+    depends_on=[diff.changed_claims])
 
 
 def process_en_label_touched(labels_differ):
@@ -162,24 +177,7 @@ def process_en_label_touched(labels_differ):
 
 en_label_touched = Feature(
     "en_label_touched", process_en_label_touched, returns=bool,
-    depends_on=[labels_differ])
-
-
-P21_changed = has_property_changed('P21')
-
-P27_changed = has_property_changed('P27')
-
-P54_changed = has_property_changed('P54')
-
-P569_changed = has_property_changed('P569')
-
-P18_changed = has_property_changed('P18')
-
-P109_changed = has_property_changed('P109')
-
-P373_changed = has_property_changed('P373')
-
-P856_changed = has_property_changed('P856')
+    depends_on=[diff.labels_differ])
 
 
 def process_no_added_sources(added_sources):
@@ -187,7 +185,7 @@ def process_no_added_sources(added_sources):
 
 number_added_sources = Feature(
     "number_added_sources", process_no_added_sources, returns=int,
-    depends_on=[added_sources])
+    depends_on=[diff.added_sources])
 
 
 def process_no_removed_sources(removed_sources):
@@ -195,7 +193,7 @@ def process_no_removed_sources(removed_sources):
 
 number_removed_sources = Feature(
     "number_removed_sources", process_no_removed_sources, returns=int,
-    depends_on=[removed_sources])
+    depends_on=[diff.removed_sources])
 
 
 def process_no_added_qualifiers(added_qualifiers):
@@ -203,7 +201,7 @@ def process_no_added_qualifiers(added_qualifiers):
 
 number_added_qualifiers = Feature(
     "number_added_qualifiers", process_no_added_qualifiers, returns=int,
-    depends_on=[added_qualifiers])
+    depends_on=[diff.added_qualifiers])
 
 
 def process_no_removed_qualifiers(removed_qualifiers):
@@ -211,7 +209,7 @@ def process_no_removed_qualifiers(removed_qualifiers):
 
 number_removed_qualifiers = Feature(
     "number_removed_qualifiers", process_no_removed_qualifiers, returns=int,
-    depends_on=[removed_qualifiers])
+    depends_on=[diff.removed_qualifiers])
 
 
 def process_no_added_badges(badges_differ, current_item, past_item):
@@ -226,7 +224,7 @@ def process_no_added_badges(badges_differ, current_item, past_item):
 
 number_added_badges = Feature(
     "number_added_badges", process_no_added_badges, returns=int,
-    depends_on=[badges_differ, current_item, past_item])
+    depends_on=[diff.badges_differ, current_item, past_item])
 
 
 def process_no_removed_badges(badges_differ, current_item, past_item):
@@ -241,7 +239,7 @@ def process_no_removed_badges(badges_differ, current_item, past_item):
 
 number_removed_badges = Feature(
     "number_removed_badges", process_no_removed_badges, returns=int,
-    depends_on=[badges_differ, current_item, past_item])
+    depends_on=[diff.badges_differ, current_item, past_item])
 
 # There is no need for changed badges.
 
@@ -258,7 +256,7 @@ def process_mean_distance_desc(parent, current, differ):
 
 mean_distance_descriptions = Feature(
     "mean_distance_descriptions", process_mean_distance_desc, returns=float,
-    depends_on=[past_item, current_item, descriptions_differ])
+    depends_on=[past_item, current_item, diff.descriptions_differ])
 
 
 def process_mean_distance_labels(parent, current, differ):
@@ -272,7 +270,7 @@ def process_mean_distance_labels(parent, current, differ):
 
 mean_distance_labels = Feature(
     "mean_distance_labels", process_mean_distance_labels, returns=float,
-    depends_on=[current_item, past_item, labels_differ])
+    depends_on=[current_item, past_item, diff.labels_differ])
 
 
 def process_proportion_of_qid_added(current_item, past_item):
@@ -329,7 +327,7 @@ LANGUAGE_REGEXES = (r"(a(frikaa?ns|lbanian?|lemanha|ng(lais|ol)|ra?b(e?|"
 LANGUAGE_RE = re.compile(LANGUAGE_REGEXES)
 
 
-def process_proportion_of_langauge_added(current_item, past_item):
+def process_proportion_of_language_added(current_item, past_item):
     past_item_doc = past_item.toJSON() if past_item is not None else {}
     current_item_res = len(re.findall(LANGUAGE_RE, str(current_item.toJSON())))
     past_item_res = len(re.findall(LANGUAGE_RE, str(past_item_doc)))
@@ -337,8 +335,8 @@ def process_proportion_of_langauge_added(current_item, past_item):
         float(current_item_res + 1)
 
 # AF/38
-proportion_of_langauge_added = Feature(
-    "proportion_of_langauge_added", process_proportion_of_langauge_added,
+proportion_of_language_added = Feature(
+    "proportion_of_language_added", process_proportion_of_language_added,
     returns=float, depends_on=[current_item, past_item])
 
 
@@ -353,17 +351,3 @@ def process_proportion_of_links_added(current_item, past_item):
 proportion_of_links_added = Feature(
     "proportion_of_links_added", process_proportion_of_links_added,
     returns=float, depends_on=[current_item, past_item])
-
-is_client_delete = has_in_comment('^\/\* clientsitelink\-remove\:')
-
-is_merge_into = has_in_comment('^\/\* wbmergeitems\-to\:')
-
-is_merge_from = has_in_comment('^\/\* wbmergeitems\-from\:')
-
-is_revert = has_in_comment('^Reverted edits by \[\[Special\:Contributions')
-
-is_rollback = has_in_comment('^Undid revision ')
-
-is_restore = has_in_comment('^Restored revision ')
-
-is_item_creation = has_in_comment('^\/\* wbsetentity \*\/')
