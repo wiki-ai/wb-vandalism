@@ -11,7 +11,6 @@ def process_item_doc(text):
         return None
     else:
         doc = json.loads(text)
-        print(doc)
         return doc
 
 item_doc = Datasource("parent_revision.item_doc", process_item_doc,
