@@ -1,4 +1,4 @@
-pywikibase == 0.0.2
+pywikibase >= 0.0.3
 revscoring
 mwapi
 python-Levenshtein
