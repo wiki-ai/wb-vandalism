@@ -1,5 +1,5 @@
 from revscoring.features import user
-from revscoring.features.modifiers import not_
+from revscoring.features.modifiers import not_, log
 
 from ..features import diff, revision
 
@@ -143,14 +143,14 @@ reverted = [
     signature_changed,
     commons_category_changed,
     official_website_changed,
-    revision.number_claims,
-    revision.number_aliases,
-    revision.number_sources,
-    revision.number_qualifiers,
-    revision.number_badges,
-    revision.number_labels,
-    revision.number_sitelinks,
-    revision.number_descriptions,
+    log(revision.number_claims + 1),
+    log(revision.number_aliases + 1),
+    log(revision.number_sources + 1),
+    log(revision.number_qualifiers + 1),
+    log(revision.number_badges + 1),
+    log(revision.number_labels + 1),
+    log(revision.number_sitelinks + 1),
+    log(revision.number_descriptions + 1),
     is_human,
     is_blp,
     user.is_bot,
