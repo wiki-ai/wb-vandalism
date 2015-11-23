@@ -98,7 +98,6 @@ reverted = [
 #    log(revscoring.features.diff.uppercase_chars_removed + 1),
 #    revscoring.features.diff.bytes_changed + 1,
 #    revscoring.featuresdiff.bytes_changed_ratio,
-    page.is_content_namespace,
 #    parent_revision.was_same_user,
     log(user.age + 1),
     diff.number_added_sitelinks,
