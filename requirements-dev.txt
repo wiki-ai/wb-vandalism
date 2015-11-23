@@ -1,5 +1,6 @@
 pywikibase >= 0.0.3
-revscoring
+revscoring >= 0.7.3
+editquality >= 0.1.1
 mwapi
 python-Levenshtein
 codecov

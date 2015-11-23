@@ -1,4 +1,4 @@
-from revscoring.features import user
+from revscoring.features import user, page
 from revscoring.features.modifiers import not_, log
 
 from ..features import diff, revision
@@ -98,9 +98,9 @@ reverted = [
 #    log(revscoring.features.diff.uppercase_chars_removed + 1),
 #    revscoring.features.diff.bytes_changed + 1,
 #    revscoring.featuresdiff.bytes_changed_ratio,
-#    page.is_content_namespace,
+    page.is_content_namespace,
 #    parent_revision.was_same_user,
-#    log(user.age + 1),
+    log(user.age + 1),
     diff.number_added_sitelinks,
     diff.number_removed_sitelinks,
     diff.number_changed_sitelinks,
