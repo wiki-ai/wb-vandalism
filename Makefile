@@ -24,7 +24,7 @@ models/wikidata.reverted.linear_svc.model: \
 	revscoring train_test \
 		revscoring.scorer_models.LinearSVC \
 		wb_vandalism.feature_lists.wikidata.reverted \
-		--version 0.0.3 \
+		--version 0.0.4 \
                 -p 'cache_size=1000' \
 		--label-type=bool > \
 	models/wikidata.reverted.linear_svc.model
