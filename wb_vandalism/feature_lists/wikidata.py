@@ -100,7 +100,7 @@ reverted = [
 #    revscoring.featuresdiff.bytes_changed_ratio,
 #    page.is_content_namespace,
 #    parent_revision.was_same_user,
-#    log(user.age + 1),
+    log(user.age + 1),
     diff.number_added_sitelinks,
     diff.number_removed_sitelinks,
     diff.number_changed_sitelinks,
