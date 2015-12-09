@@ -46,4 +46,4 @@ tuning_reports/wikidata.reverted.md: \
 		--cv-timeout=60 \
 		--debug \
 		--label-type=bool > \
-	tuning_reports/wikidata.damaging.md
+	tuning_reports/wikidata.reverted.md
