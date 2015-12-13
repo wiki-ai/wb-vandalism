@@ -28,6 +28,20 @@ models/wikidata.reverted.linear_svc.model: \
 		--label-type=bool > \
 	models/wikidata.reverted.linear_svc.model
 
+models/wikidata.reverted.rf.model: \
+		datasets/wikidata.features_reverted.20k_balanced_2015.tsv
+	cut datasets/wikidata.features_reverted.20k_balanced_2015.tsv -f2- | \
+	revscoring train_test \
+		revscoring.scorer_models.RF \
+		wb_vandalism.feature_lists.wikidata.reverted \
+		--version 0.0.4 \
+		-p 'max_features="log2"' \
+                -p 'criterion="entropy"' \
+                -p 'min_samples_leaf=1' \
+                -p 'n_estimators=80' \
+                --label-type=bool > \
+        models/wikidata.reverted.rf.model
+
 datasets/wikidata.prelabeled_revisions.20k_balanced_2015.tsv: \
 		datasets/wikidata.sampled_revisions.20k_balanced_2015.tsv
 	cat datasets/wikidata.sampled_revisions.20k_balanced_2015.tsv | \
@@ -37,7 +51,7 @@ datasets/wikidata.prelabeled_revisions.20k_balanced_2015.tsv: \
 		--verbose > \
 	datasets/wikidata.prelabeled_revisions.20k_balanced_2015.tsv
 
-tuning_reports/wikidata.reverted.md: \
+tuning_reports/wikidata.reverted.roc_auc.md: \
 		datasets/wikidata.features_reverted.20k_balanced_2015.tsv 
 	cat datasets/wikidata.features_reverted.20k_balanced_2015.tsv | cut -f2- | \
 	revscoring tune \
@@ -45,5 +59,19 @@ tuning_reports/wikidata.reverted.md: \
 		wb_vandalism.feature_lists.wikidata.reverted \
 		--cv-timeout=60 \
 		--debug \
+		--scoring=roc_auc \
 		--label-type=bool > \
-	tuning_reports/wikidata.reverted.md
+	tuning_reports/wikidata.reverted.roc_auc.md
+
+tuning_reports/wikidata.reverted.pr_auc.md: \
+		datasets/wikidata.features_reverted.20k_balanced_2015.tsv
+	cat datasets/wikidata.features_reverted.20k_balanced_2015.tsv | cut -f2- | \
+	revscoring tune \
+		config/damaging_classifiers.params.yaml \
+		wb_vandalism.feature_lists.wikidata.reverted \
+		--cv-timeout=60 \
+		--debug \
+		--scoring=pr_auc \
+		--label-type=bool > \
+	tuning_reports/wikidata.reverted.pr_auc.md
+
