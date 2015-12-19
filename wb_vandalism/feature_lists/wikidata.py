@@ -29,6 +29,8 @@ class items:
 # Comment features
 is_client_delete = revision.comment_matches(r"^\/\* clientsitelink\-remove\:",
                                             name='revision.is_client_delete')
+is_client_move = revision.comment_matches(r"^\/\* clientsitelink\-update\:",
+                                            name='revision.is_client_move')
 is_merge_into = revision.comment_matches(r"^\/\* wbmergeitems\-to\:",
                                          name='revision.is_merge_into')
 is_merge_from = revision.comment_matches(r"^\/\* wbmergeitems\-from\:",
@@ -128,6 +130,7 @@ reverted = [
     diff.proportion_of_qid_added,
     diff.proportion_of_language_added,
     diff.proportion_of_links_added,
+    is_client_move,
     is_client_delete,
     is_merge_into,
     is_merge_from,
