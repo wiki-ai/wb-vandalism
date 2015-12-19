@@ -42,7 +42,8 @@ is_rollback = revision.comment_matches(r"^Undid revision ",
                                        name='revision.is_rollback')
 is_restore = revision.comment_matches(r"^Restored revision ",
                                       name='revision.is_restore')
-is_item_creation = revision.comment_matches(r"^\/\* wbsetentity \*\/",
+is_item_creation = revision.comment_matches(r"^\/\* (wbsetentity|"
+                                            r"wbeditentity-create\:0\|) \*\/",
                                             name='revision.is_item_creation')
 
 # Properties changed
