@@ -80,7 +80,7 @@ has_birthday = \
     revision.has_property(properties.DATE_OF_BIRTH,
                           name='revision.has_birthday')
 dead = \
-    revision.has_property(properties.DATE_OF_BIRTH,
+    revision.has_property(properties.DATE_OF_DEATH,
                           name='revision.dead')
 is_blp = has_birthday.and_(not_(dead))
 
