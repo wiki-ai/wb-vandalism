@@ -17,17 +17,6 @@ datasets/wikidata.features_reverted.20k_balanced_2015.tsv: \
 		--include-revid > \
 	datasets/wikidata.features_reverted.20k_balanced_2015.tsv
 
-models/wikidata.reverted.linear_svc.model: \
-		datasets/wikidata.features_reverted.20k_balanced_2015.tsv
-	cut datasets/wikidata.features_reverted.20k_balanced_2015.tsv -f2- | \
-	revscoring train_test \
-		revscoring.scorer_models.LinearSVC \
-		wb_vandalism.feature_lists.wikidata.reverted \
-		--version 0.0.4 \
-                -p 'cache_size=1000' \
-		--label-type=bool > \
-	models/wikidata.reverted.linear_svc.model
-
 models/wikidata.reverted.rf.model: \
 		datasets/wikidata.features_reverted.20k_balanced_2015.tsv
 	cut datasets/wikidata.features_reverted.20k_balanced_2015.tsv -f2- | \
