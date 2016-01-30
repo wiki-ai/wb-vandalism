@@ -41,7 +41,7 @@ datasets/wikidata.prelabeled_revisions.20k_balanced_2015.tsv: \
 	datasets/wikidata.prelabeled_revisions.20k_balanced_2015.tsv
 
 tuning_reports/wikidata.reverted.roc_auc.md: \
-		datasets/wikidata.features_reverted.20k_balanced_2015.tsv 
+		datasets/wikidata.features_reverted.20k_balanced_2015.tsv
 	cat datasets/wikidata.features_reverted.20k_balanced_2015.tsv | cut -f2- | \
 	revscoring tune \
 		config/damaging_classifiers.params.yaml \
@@ -64,3 +64,21 @@ tuning_reports/wikidata.reverted.pr_auc.md: \
 		--label-type=bool > \
 	tuning_reports/wikidata.reverted.pr_auc.md
 
+
+### Study of Wikidata! ###
+
+datasets/wikidatawiki.revision_sample.nonbot_user_edit_type.1m_2015.tsv: \
+		sql/revision_sample.nonbot_user_edit_type.1m_2015.sql
+	cat sql/revision_sample.nonbot_user_edit_type.1m_2015.sql | \
+	mysql $(mysql_args) wikidatawiki > \
+	datasets/wikidata.revision_sample.nonbot_user_edit_type.1m_2015.sql
+
+datasets/wikidatawiki.revision_sample.nonbot_user_edit_type_reverted.1m_2015.tsv: \
+		datasets/wikidatawiki.revision_sample.nonbot_user_edit_type.1m_2015.tsv
+	cat datasets/wikidatawiki.revision_sample.nonbot_user_edit_type.1m_2015.tsv | \
+	editquality label_reverted \
+		--host https://wikidata.org \
+		--revert-radius 3 \
+		--revert-window 99999999 \
+		--verbose >
+	datasets/wikidatawiki.revision_sample.nonbot_user_edit_type_reverted.1m_2015.tsv
