@@ -1,0 +1,7 @@
+RandomForestClassifier:
+  class: sklearn.ensemble.RandomForestClassifier
+  params:
+    n_estimators: [500, 600, 700, 800, 900]
+    min_samples_leaf: [1]
+    max_features: ["log2"]
+    criterion: ["entropy"]
