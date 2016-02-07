@@ -146,7 +146,7 @@ datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv: \
 datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv:
 	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
 	revscoring extract_features \
-		wb_vandalism.feature_lists.wikidata_models.general \
+		wb_vandalism.feature_lists.experimental.general \
 		--host https://wikidata.org \
 		--include-revid \
 		--verbose > \
