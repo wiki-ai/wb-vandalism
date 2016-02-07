@@ -152,3 +152,38 @@ datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv:
 		--verbose > \
 	datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv
 
+datasets/wikidata.features_reverted.general_and_context.nonbot.500k_2015.tsv:
+	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
+	revscoring extract_features \
+		wb_vandalism.feature_lists.experimental.general_and_context \
+		--host https://wikidata.org \
+		--include-revid \
+		--verbose > \
+	datasets/wikidata.features_reverted.general_and_context.nonbot.500k_2015.tsv
+
+datasets/wikidata.features_reverted.general_context_and_type.nonbot.500k_2015.tsv:
+	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
+	revscoring extract_features \
+		wb_vandalism.feature_lists.experimental.general_context_and_type \
+		--host https://wikidata.org \
+		--include-revid \
+		--verbose > \
+	datasets/wikidata.features_reverted.general_context_and_type.nonbot.500k_2015.tsv
+
+datasets/wikidata.features_reverted.general_and_user.nonbot.500k_2015.tsv:
+	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
+	revscoring extract_features \
+		wb_vandalism.feature_lists.experimental.general_and_user \
+		--host https://wikidata.org \
+		--include-revid \
+		--verbose > \
+	datasets/wikidata.features_reverted.general_and_user.nonbot.500k_2015.tsv
+
+datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv:
+	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
+	revscoring extract_features \
+		wb_vandalism.feature_lists.experimental.all \
+		--host https://wikidata.org \
+		--include-revid \
+		--verbose > \
+	datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv
