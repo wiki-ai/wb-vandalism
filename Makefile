@@ -187,3 +187,103 @@ datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv:
 		--include-revid \
 		--verbose > \
 	datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv
+
+models/wikidata.reverted.general.rf.model: \
+		datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv
+	cut datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv -f2- | \
+	revscoring train_test \
+		revscoring.scorer_models.RF \
+		wb_vandalism.feature_lists.experimental.general \
+		--version 0.0.1 \
+		-p 'max_features="log2"' \
+		-p 'criterion="entropy"' \
+		-p 'min_samples_leaf=1' \
+		-p 'n_estimators=80' \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
+		--balance-sample-weight \
+		--center --scale \
+		--label-type=bool > \
+	models/models/wikidata.reverted.general.rf.model
+
+models/wikidata.reverted.general_and_context.rf.model: \
+		datasets/wikidata.features_reverted.general_and_context.nonbot.500k_2015.tsv
+	cut datasets/wikidata.features_reverted.general_and_context.nonbot.500k_2015.tsv -f2- | \
+	revscoring train_test \
+		revscoring.scorer_models.RF \
+		wb_vandalism.feature_lists.experimental.general_and_context \
+		--version 0.0.1 \
+		-p 'max_features="log2"' \
+		-p 'criterion="entropy"' \
+		-p 'min_samples_leaf=1' \
+		-p 'n_estimators=80' \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
+		--balance-sample-weight \
+		--center --scale \
+		--label-type=bool > \
+	models/models/wikidata.reverted.general_and_context.rf.model
+
+models/wikidata.reverted.general_context_and_type.rf.model: \
+		datasets/wikidata.features_reverted.general_context_and_type.nonbot.500k_2015.tsv
+	cut datasets/wikidata.features_reverted.general_context_and_type.nonbot.500k_2015.tsv -f2- | \
+	revscoring train_test \
+		revscoring.scorer_models.RF \
+		wb_vandalism.feature_lists.experimental.general_context_and_type \
+		--version 0.0.1 \
+		-p 'max_features="log2"' \
+		-p 'criterion="entropy"' \
+		-p 'min_samples_leaf=1' \
+		-p 'n_estimators=80' \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
+		--balance-sample-weight \
+		--center --scale \
+		--label-type=bool > \
+	models/models/wikidata.reverted.general_context_and_type.rf.model
+
+models/wikidata.reverted.general_and_user.rf.model: \
+		datasets/wikidata.features_reverted.general_and_user.nonbot.500k_2015.tsv
+	cut datasets/wikidata.features_reverted.general_and_user.nonbot.500k_2015.tsv -f2- | \
+	revscoring train_test \
+		revscoring.scorer_models.RF \
+		wb_vandalism.feature_lists.experimental.general_and_user \
+		--version 0.0.1 \
+		-p 'max_features="log2"' \
+		-p 'criterion="entropy"' \
+		-p 'min_samples_leaf=1' \
+		-p 'n_estimators=80' \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
+		--balance-sample-weight \
+		--center --scale \
+		--label-type=bool > \
+	models/models/wikidata.reverted.general_and_user.rf.model
+
+models/wikidata.reverted.all.rf.model: \
+		datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv
+	cut datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv -f2- | \
+	revscoring train_test \
+		revscoring.scorer_models.RF \
+		wb_vandalism.feature_lists.experimental.all \
+		--version 0.0.1 \
+		-p 'max_features="log2"' \
+		-p 'criterion="entropy"' \
+		-p 'min_samples_leaf=1' \
+		-p 'n_estimators=80' \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
+		--balance-sample-weight \
+		--center --scale \
+		--label-type=bool > \
+	models/models/wikidata.reverted.all.rf.model
