@@ -1,3 +1,7 @@
+conn_user = --defaults-file=~/.my.research.cnf -u research
+
+mysql_args = $(conn_user) -h analytics-store.eqiad.wmnet
+
 datasets/wikidata.rev_reverted.20k_balanced_2015.tsv: \
 		datasets/wikidata.sampled_revisions.20k_balanced_2015.tsv
 	cat datasets/wikidata.sampled_revisions.20k_balanced_2015.tsv | \
@@ -71,14 +75,40 @@ datasets/wikidatawiki.revision_sample.nonbot_user_edit_type.1m_2015.tsv: \
 		sql/revision_sample.nonbot_user_edit_type.1m_2015.sql
 	cat sql/revision_sample.nonbot_user_edit_type.1m_2015.sql | \
 	mysql $(mysql_args) wikidatawiki > \
-	datasets/wikidata.revision_sample.nonbot_user_edit_type.1m_2015.sql
+	datasets/wikidata.revision_sample.nonbot_user_edit_type.1m_2015.tsv
 
-datasets/wikidatawiki.revision_sample.nonbot_user_edit_type_reverted.1m_2015.tsv: \
-		datasets/wikidatawiki.revision_sample.nonbot_user_edit_type.1m_2015.tsv
-	cat datasets/wikidatawiki.revision_sample.nonbot_user_edit_type.1m_2015.tsv | \
+datasets/wikidata.revision_sample.nonbot_user_edit_type_reverted.1m_2015.tsv: \
+		datasets/wikidata.revision_sample.nonbot_user_edit_type.1m_2015.tsv
+	cat datasets/wikidata.revision_sample.nonbot_user_edit_type.1m_2015.tsv | \
 	editquality label_reverted \
 		--host https://wikidata.org \
 		--revert-radius 3 \
-		--revert-window 99999999 \
-		--verbose >
-	datasets/wikidatawiki.revision_sample.nonbot_user_edit_type_reverted.1m_2015.tsv
+		--revert-window 168 \
+		--verbose > \
+	datasets/wikidata.revision_sample.nonbot_user_edit_type_reverted.1m_2015.tsv
+
+datasets/wikidata_nonbot_sample.created: \
+		sql/wikidata_nonbot_sample.create.sql
+	cat sql/wikidata_nonbot_sample.create.sql | \
+	mysql $(mysql_args) staging > \
+	datasets/wikidata_nonbot_sample.created
+
+datasets/wikidata_nonbot_sample.loaded: \
+		datasets/wikidata_nonbot_sample.created
+	ln -sf datasets/wikidata.revision_sample.nonbot_user_edit_type.1m_2015.tsv wikidata_nonbot_sample && \
+	mysqlimport $(mysql_args) --local --ignore-lines=1 staging wikidata_nonbot_sample; \
+	rm -f wikidata_nonbot_sample > \
+	datasets/wikidata_nonbot_sample.loaded
+
+datasets/wikidata_nonbot_reverted_sample.created: \
+		sql/wikidata_nonbot_reverted_sample.create.sql
+	cat sql/wikidata_nonbot_reverted_sample.create.sql | \
+	mysql $(mysql_args) staging > \
+        datasets/wikidata_nonbot_reverted_sample.created
+
+datasets/wikidata_nonbot_reverted_sample.loaded: \
+		datasets/wikidata_nonbot_reverted_sample.created
+	ln -sf datasets/wikidata.revision_sample.nonbot_user_edit_type_reverted.1m_2015.cleaned.tsv wikidata_nonbot_reverted_sample && \
+	mysqlimport $(mysql_args) --local --ignore-lines=1 staging wikidata_nonbot_reverted_sample; \
+	rm -f wikidata_nonbot_reverted_sample > \
+	datasets/wikidata_nonbot_reverted_sample.loaded
