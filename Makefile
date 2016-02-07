@@ -71,6 +71,13 @@ tuning_reports/wikidata.reverted.pr_auc.md: \
 
 ### Study of Wikidata! ###
 
+experimental_models:
+	models/wikidata.reverted.general.rf.model
+	models/wikidata.reverted.general_and_context.rf.model
+	models/wikidata.reverted.general_context_and_type.rf.model
+	models/wikidata.reverted.general_and_user.rf.model
+	models/wikidata.reverted.all.rf.model
+
 datasets/wikidatawiki.revision_sample.nonbot_user_edit_type.1m_2015.tsv: \
 		sql/revision_sample.nonbot_user_edit_type.1m_2015.sql
 	cat sql/revision_sample.nonbot_user_edit_type.1m_2015.sql | \
