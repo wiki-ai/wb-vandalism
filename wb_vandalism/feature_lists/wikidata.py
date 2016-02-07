@@ -1,7 +1,10 @@
-from revscoring.features import user
-from revscoring.features.modifiers import not_, log
+from revscoring.features import revision_oriented, wikibase
+from revscoring.features.meta import bools
+from revscoring.features.modifiers import not_
 
-from ..features import diff, revision
+from . import wikibase as wb_lists
+
+name = "wikidatawiki"
 
 
 class properties:
@@ -26,167 +29,76 @@ class items:
     """
     HUMAN = 'Q5'
 
+
 # Comment features
-is_client_delete = revision.comment_matches(r"^\/\* clientsitelink\-remove\:",
-                                            name='revision.is_client_delete')
-is_client_move = revision.comment_matches(r"^\/\* clientsitelink\-update\:",
-                                            name='revision.is_client_move')
-is_merge_into = revision.comment_matches(r"^\/\* wbmergeitems\-to\:",
-                                         name='revision.is_merge_into')
-is_merge_from = revision.comment_matches(r"^\/\* wbmergeitems\-from\:",
-                                         name='revision.is_merge_from')
-is_revert = \
-    revision.comment_matches(r"^Reverted edits by \[\[Special\:Contributions",
-                             name='revision.is_revert')
-is_rollback = revision.comment_matches(r"^Undid revision ",
-                                       name='revision.is_rollback')
-is_restore = revision.comment_matches(r"^Restored revision ",
-                                      name='revision.is_restore')
-is_item_creation = revision.comment_matches(r"^\/\* (wbsetentity|"
-                                            r"wbeditentity-create\:0\|) \*\/",
-                                            name='revision.is_item_creation')
+is_client_delete = revision_oriented.revision.comment_matches(
+    r"^\/\* clientsitelink\-remove\:",
+    name=name + ".is_client_delete")
+is_client_move = revision_oriented.revision.comment_matches(
+    r"^\/\* clientsitelink\-update\:",
+    name=name + ".is_client_move")
+is_merge_into = revision_oriented.revision.comment_matches(
+    r"^\/\* wbmergeitems\-to\:",
+    name=name + ".is_merge_into")
+is_merge_from = revision_oriented.revision.comment_matches(
+    r"^\/\* wbmergeitems\-from\:",
+    name=name + ".is_merge_from")
+is_revert = revision_oriented.revision.comment_matches(
+    r".*\b(Undid|Reverted|rvv)\b.*",
+    name=name + ".is_revert")
+is_restore = revision_oriented.revision.comment_matches(
+    r"^Restored revision ",
+    name=name + ".is_restore")
+is_item_creation = revision_oriented.revision.comment_matches(
+    r"^\/\* (wbsetentity|wbeditentity-create\:0\|) \*\/",
+    name=name + ".is_item_creation")
 
 # Properties changed
-sex_or_gender_changed = \
-    diff.property_changed(properties.SEX_OR_GENDER,
-                          name='diff.sex_or_gender_changed')
-country_of_citizenship_changed = \
-    diff.property_changed(properties.COUNTRY_OF_CITIZENSHIP,
-                          name='diff.country_of_citizenship_changed')
-member_of_sports_team_changed = \
-    diff.property_changed(properties.MEMBER_OF_SPORTS_TEAM,
-                          name='diff.member_of_sports_team_changed')
-date_of_birth_changed = \
-    diff.property_changed(properties.DATE_OF_BIRTH,
-                          name='diff.date_of_birth_changed')
-image_changed = \
-    diff.property_changed(properties.IMAGE,
-                          name='diff.image_changed')
-signature_changed = \
-    diff.property_changed(properties.SIGNATURE,
-                          name='diff.signature_changed')
-commons_category_changed = \
-    diff.property_changed(properties.COMMONS_CATEGORY,
-                          name='diff.commons_category_changed')
-official_website_changed = \
-    diff.property_changed(properties.OFFICIAL_WEBSITE,
-                          name='diff.official_website_changed')
+diff = wikibase.revision.diff
+sex_or_gender_changed = diff.property_changed(
+    properties.SEX_OR_GENDER,
+    name=name + '.sex_or_gender_changed')
+country_of_citizenship_changed = diff.property_changed(
+    properties.COUNTRY_OF_CITIZENSHIP,
+    name=name + '.country_of_citizenship_changed')
+member_of_sports_team_changed = diff.property_changed(
+    properties.MEMBER_OF_SPORTS_TEAM,
+    name=name + '.member_of_sports_team_changed')
+date_of_birth_changed = diff.property_changed(
+    properties.DATE_OF_BIRTH,
+    name=name + '.date_of_birth_changed')
+image_changed = diff.property_changed(
+    properties.IMAGE,
+    name=name + '.image_changed')
+signature_changed = diff.property_changed(
+    properties.SIGNATURE,
+    name=name + '.signature_changed')
+commons_category_changed = diff.property_changed(
+    properties.COMMONS_CATEGORY,
+    name=name + '.commons_category_changed')
+official_website_changed = diff.property_changed(
+    properties.OFFICIAL_WEBSITE,
+    name=name + '.official_website_changed')
+en_label_changed = bools.item_in_set(
+    'en', diff.datasources.labels_changed,
+    name=name + '.en_label_changed')
+
 
 # Status
-is_human = \
-    revision.has_property_value(properties.INSTANCE_OF, items.HUMAN,
-                                name='revision.is_human')
-has_birthday = \
-    revision.has_property(properties.DATE_OF_BIRTH,
-                          name='revision.has_birthday')
-dead = \
-    revision.has_property(properties.DATE_OF_DEATH,
-                          name='revision.dead')
+revision = wikibase.revision
+is_human = revision.has_property_value(properties.INSTANCE_OF, items.HUMAN,
+                                       name=name + '.is_human')
+has_birthday = revision.has_property(properties.DATE_OF_BIRTH,
+                                     name='revision.has_birthday')
+dead = revision.has_property(properties.DATE_OF_DEATH,
+                             name='revision.dead')
 is_blp = has_birthday.and_(not_(dead))
 
-
-reverted = [
-    log(user.age + 1),
-    diff.number_added_sitelinks,
-    diff.number_removed_sitelinks,
-    diff.number_changed_sitelinks,
-    diff.number_added_labels,
-    diff.number_removed_labels,
-    diff.number_changed_labels,
-    diff.number_added_descriptions,
-    diff.number_removed_descriptions,
-    diff.number_changed_descriptions,
-    diff.number_added_aliases,
-    diff.number_removed_aliases,
-    diff.number_added_claims,
-    diff.number_removed_claims,
-    diff.number_changed_claims,
-    diff.number_changed_identifiers,
-    diff.en_label_touched,
-    diff.number_added_sources,
-    diff.number_removed_sources,
-    diff.number_added_qualifiers,
-    diff.number_removed_qualifiers,
-    diff.number_added_badges,
-    diff.number_removed_badges,
-#    diff.mean_distance_descriptions,
-#    diff.mean_distance_labels,
-    diff.proportion_of_qid_added,
-    diff.proportion_of_language_added,
-    diff.proportion_of_links_added,
-    is_client_move,
-    is_client_delete,
-    is_merge_into,
-    is_merge_from,
-    is_revert,
-    is_rollback,
-    is_restore,
-    is_item_creation,
-    sex_or_gender_changed,
-    country_of_citizenship_changed,
-    member_of_sports_team_changed,
-    date_of_birth_changed,
-    image_changed,
-    signature_changed,
-    commons_category_changed,
-    official_website_changed,
-    log(revision.number_claims + 1),
-    log(revision.number_aliases + 1),
-    log(revision.number_sources + 1),
-    log(revision.number_qualifiers + 1),
-    log(revision.number_badges + 1),
-    log(revision.number_labels + 1),
-    log(revision.number_sitelinks + 1),
-    log(revision.number_descriptions + 1),
-    is_human,
-    is_blp,
-    user.is_bot,
-    user.is_anon,
-]
-
-general_features = [
-    diff.number_added_sitelinks,
-    diff.number_removed_sitelinks,
-    diff.number_changed_sitelinks,
-    diff.number_added_labels,
-    diff.number_removed_labels,
-    diff.number_changed_labels,
-    diff.number_added_descriptions,
-    diff.number_removed_descriptions,
-    diff.number_changed_descriptions,
-    diff.number_added_aliases,
-    diff.number_removed_aliases,
-    diff.number_added_claims,
-    diff.number_removed_claims,
-    diff.number_changed_claims,
-    diff.number_changed_identifiers,
-    diff.number_added_sources,
-    diff.number_removed_sources,
-    diff.number_added_qualifiers,
-    diff.number_removed_qualifiers,
-    diff.number_added_badges,
-    diff.number_removed_badges,
-    log(revision.number_claims + 1),
-    log(revision.number_aliases + 1),
-    log(revision.number_sources + 1),
-    log(revision.number_qualifiers + 1),
-    log(revision.number_badges + 1),
-    log(revision.number_labels + 1),
-    log(revision.number_sitelinks + 1),
-    log(revision.number_descriptions + 1),
-]
-
-user_related_features = [
-    log(user.age + 1),
-    user.is_bot,
-    user.is_anon,
-]
-
-features_to_catch_certain_type = [
-    diff.en_label_touched,
-    diff.proportion_of_qid_added,
-    diff.proportion_of_language_added,
-    diff.proportion_of_links_added,
+context = [
+    en_label_changed,
+    wikibase.revision.diff.proportion_of_qid_added,
+    wikibase.revision.diff.proportion_of_language_added,
+    wikibase.revision.diff.proportion_of_links_added,
     sex_or_gender_changed,
     country_of_citizenship_changed,
     member_of_sports_team_changed,
@@ -196,16 +108,20 @@ features_to_catch_certain_type = [
     commons_category_changed,
     official_website_changed,
     is_human,
-    is_blp,
+    is_blp
 ]
 
-features_to_reduce_false_positives = [
+edit_type = [
     is_client_move,
     is_client_delete,
     is_merge_into,
     is_merge_from,
     is_revert,
-    is_rollback,
     is_restore,
     is_item_creation,
 ]
+
+damaging = wb_lists.user_rights + wb_lists.protected_user + \
+           wb_lists.general + context + edit_type
+reverted = damaging
+goodfaith = damaging
