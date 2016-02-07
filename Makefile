@@ -112,3 +112,43 @@ datasets/wikidata_nonbot_reverted_sample.loaded: \
 	mysqlimport $(mysql_args) --local --ignore-lines=1 staging wikidata_nonbot_reverted_sample; \
 	rm -f wikidata_nonbot_reverted_sample > \
 	datasets/wikidata_nonbot_reverted_sample.loaded
+
+###  The 500k sample ####
+datasets/wikidata.revision_sample.nonbot_with_exclusions.500k_2015.tsv: \
+		sql/revision_sample.nonbot_with_exclusions.500k_2015.sql
+	cat sql/revision_sample.nonbot_with_exclusions.500k_2015.sql | \
+	mysql $(mysql_args) wikidatawiki > \
+	datasets/wikidata.revision_sample.nonbot_with_exclusions.500k_2015.tsv
+
+
+datasets/wikidata.rev_reverted.nonbot.non_excluded.tsv: \
+		datasets/wikidata.revision_sample.nonbot_with_exclusions.500k_2015.tsv
+	cat datasets/wikidata.revision_sample.nonbot_with_exclusions.500k_2015.tsv | \
+	grep -P "rev_id\texclusion_criteria|[0-9]+\tNULL" | cut -f1 | \
+	editquality label_reverted \
+		--host https://wikidata.org \
+		--revert-radius 5 \
+		--revert-window 168 \
+		--exclude-reverting "/\* client" \
+		--verbose > \
+	datasets/wikidata.rev_reverted.nonbot.non_excluded.tsv
+
+datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv: \
+		datasets/wikidata.revision_sample.nonbot_with_exclusions.500k_2015.tsv \
+		datasets/wikidata.rev_reverted.nonbot.non_excluded.tsv
+	tail -n+2 datasets/wikidata.revision_sample.nonbot_with_exclusions.500k_2015.tsv | \
+	grep -v NULL | \
+	sed -r "s/([0-9]+)\t[a-Z_]+/\1\tFalse/" | \
+	cat datasets/wikidata.rev_reverted.nonbot.non_excluded.tsv - | \
+	shuf > \
+	datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv
+
+datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv:
+	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
+	revscoring extract_features \
+		wb_vandalism.feature_lists.wikidata_models.general \
+		--host https://wikidata.org \
+		--include-revid \
+		--verbose > \
+	datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv
+
