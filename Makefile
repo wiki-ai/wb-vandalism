@@ -213,7 +213,7 @@ models/wikidata.reverted.general.rf.model: \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
-	models/models/wikidata.reverted.general.rf.model
+	models/wikidata.reverted.general.rf.model
 
 models/wikidata.reverted.general_and_context.rf.model: \
 		datasets/wikidata.features_reverted.general_and_context.nonbot.500k_2015.tsv
@@ -233,7 +233,7 @@ models/wikidata.reverted.general_and_context.rf.model: \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
-	models/models/wikidata.reverted.general_and_context.rf.model
+	models/wikidata.reverted.general_and_context.rf.model
 
 models/wikidata.reverted.general_context_and_type.rf.model: \
 		datasets/wikidata.features_reverted.general_context_and_type.nonbot.500k_2015.tsv
@@ -253,7 +253,7 @@ models/wikidata.reverted.general_context_and_type.rf.model: \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
-	models/models/wikidata.reverted.general_context_and_type.rf.model
+	models/wikidata.reverted.general_context_and_type.rf.model
 
 models/wikidata.reverted.general_and_user.rf.model: \
 		datasets/wikidata.features_reverted.general_and_user.nonbot.500k_2015.tsv
@@ -273,7 +273,7 @@ models/wikidata.reverted.general_and_user.rf.model: \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
-	models/models/wikidata.reverted.general_and_user.rf.model
+	models/wikidata.reverted.general_and_user.rf.model
 
 models/wikidata.reverted.all.rf.model: \
 		datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv
@@ -293,4 +293,4 @@ models/wikidata.reverted.all.rf.model: \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
-	models/models/wikidata.reverted.all.rf.model
+	models/wikidata.reverted.all.rf.model
