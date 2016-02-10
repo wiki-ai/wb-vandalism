@@ -249,7 +249,8 @@ models/wikidata.reverted.general.rf.pretest.model: \
 	models/wikidata.reverted.general.rf.pretest.model
 
 models/wikidata.reverted.general.rf.model: \
-		models/wikidata.reverted.general.rf.pretest.model
+		models/wikidata.reverted.general.rf.pretest.model \
+		datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv
 	cut datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
 		models/wikidata.reverted.general.rf.pretest.model \
@@ -277,7 +278,8 @@ models/wikidata.reverted.general_and_context.rf.pretest.model: \
 	models/wikidata.reverted.general_and_context.rf.pretest.model
 
 models/wikidata.reverted.general_and_context.rf.model: \
-		models/wikidata.reverted.general_and_context.rf.pretest.model
+		models/wikidata.reverted.general_and_context.rf.pretest.model \
+		datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv
 	cut datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
 		models/wikidata.reverted.general_and_context.rf.pretest.model \
@@ -305,7 +307,8 @@ models/wikidata.reverted.general_context_and_type.rf.pretest.model: \
 	models/wikidata.reverted.general_context_and_type.rf.pretest.model
 
 models/wikidata.reverted.general_context_and_type.rf.model: \
-		models/wikidata.reverted.general_context_and_type.rf.pretest.model
+		models/wikidata.reverted.general_context_and_type.rf.pretest.model \
+		datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv
 	cut datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
 		models/wikidata.reverted.general_context_and_type.rf.pretest.model \
@@ -333,7 +336,8 @@ models/wikidata.reverted.general_and_user.rf.pretest.model: \
 	models/wikidata.reverted.general_and_user.rf.pretest.model
 
 models/wikidata.reverted.general_and_user.rf.model: \
-		models/wikidata.reverted.general_and_user.rf.pretest.model
+		models/wikidata.reverted.general_and_user.rf.pretest.model \
+		datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv
 	cut datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
 		models/wikidata.reverted.general_and_user.rf.pretest.model \
@@ -361,7 +365,8 @@ models/wikidata.reverted.all.rf.pretest.model: \
 	models/wikidata.reverted.all.rf.pretest.model
 
 models/wikidata.reverted.all.rf.model: \
-		models/wikidata.reverted.all.rf.pretest.model
+		models/wikidata.reverted.all.rf.pretest.model \
+		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
 	cut datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
 		models/wikidata.reverted.all.rf.pretest.model \
