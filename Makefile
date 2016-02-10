@@ -376,3 +376,75 @@ models/wikidata.reverted.all.rf.model: \
 		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--label-type=bool > \
 	models/wikidata.reverted.all.rf.model
+
+models/wikidata.reverted.all.gradient_boosting.pretest.model: \
+		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
+	cut datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv -f2- | \
+	revscoring train_model \
+		revscoring.scorer_models.GradientBoosting \
+		wb_vandalism.feature_lists.experimental.all \
+		--version 0.0.1 \
+		-p 'max_depth=7' \
+		-p 'learning_rate=0.1' \
+		-p 'n_estimators=500' \
+		-p 'max_features="log2"' \
+		--balance-sample-weight \
+		--center --scale \
+		--label-type=bool > \
+	models/wikidata.reverted.all.gradient_boosting.pretest.model
+
+models/wikidata.reverted.all.gradient_boosting.model: \
+		models/wikidata.reverted.all.gradient_boosting.pretest.model \
+		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
+	cut datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv -f2- | \
+	revscoring test_model \
+		models/wikidata.reverted.all.gradient_boosting.pretest.model \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
+		--label-type=bool > \
+	models/wikidata.reverted.all.gradient_boosting.model
+
+experimental_test_scores: \
+	datasets/wikidata.reverted.general.rf.test_scores.tsv \
+	datasets/wikidata.reverted.general_and_context.rf.test_scores.tsv \
+	datasets/wikidata.reverted.general_context_and_type.rf.test_scores.tsv \
+	datasets/wikidata.reverted.general_and_user.rf.test_scores.tsv \
+	datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv
+
+datasets/wikidata.reverted.general.rf.test_scores.tsv: \
+		cat datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv | \
+		python wb_vandalism/test_scores.py \
+			models/wikidata.reverted.general.rf.model >
+		datasets/wikidata.reverted.general.rf.test_scores.tsv
+
+datasets/wikidata.reverted.general_and_context.rf.test_scores.tsv: \
+		cat datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv | \
+		python wb_vandalism/test_scores.py \
+			models/wikidata.reverted.general_and_context.rf.model >
+		datasets/wikidata.reverted.general_and_context.rf.test_scores.tsv
+
+datasets/wikidata.reverted.general_context_and_type.rf.test_scores.tsv: \
+		cat datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv | \
+		python wb_vandalism/test_scores.py \
+			models/wikidata.reverted.general_context_and_type.rf.model >
+		datasets/wikidata.reverted.general_context_and_type.rf.test_scores.tsv
+
+datasets/wikidata.reverted.general_and_user.rf.test_scores.tsv: \
+		cat datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv | \
+		python wb_vandalism/test_scores.py \
+			models/wikidata.reverted.general_and_user.rf.model >
+		datasets/wikidata.reverted.general_and_user.rf.test_scores.tsv
+
+datasets/wikidata.reverted.all.rf.test_scores.tsv: \
+		cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
+		python wb_vandalism/test_scores.py \
+			models/wikidata.reverted.all.rf.model >
+		datasets/wikidata.reverted.all.rf.test_scores.tsv
+
+datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv: \
+		cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
+		python wb_vandalism/test_scores.py \
+			models/wikidata.reverted.all.gradient_boosting.model >
+		datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv
