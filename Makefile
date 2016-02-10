@@ -71,11 +71,11 @@ tuning_reports/wikidata.reverted.pr_auc.md: \
 
 ### Study of Wikidata! ###
 
-experimental_models:
-	models/wikidata.reverted.general.rf.model
-	models/wikidata.reverted.general_and_context.rf.model
-	models/wikidata.reverted.general_context_and_type.rf.model
-	models/wikidata.reverted.general_and_user.rf.model
+experimental_models: \
+	models/wikidata.reverted.general.rf.model \
+	models/wikidata.reverted.general_and_context.rf.model \
+	models/wikidata.reverted.general_context_and_type.rf.model \
+	models/wikidata.reverted.general_and_user.rf.model \
 	models/wikidata.reverted.all.rf.model
 
 datasets/wikidatawiki.revision_sample.nonbot_user_edit_type.1m_2015.tsv: \
@@ -248,7 +248,7 @@ models/wikidata.reverted.general.rf.pretest.model: \
 		--label-type=bool > \
 	models/wikidata.reverted.general.rf.pretest.model
 
-models/wikidata.reverted.general.rf.model:
+models/wikidata.reverted.general.rf.model: \
 		models/wikidata.reverted.general.rf.pretest.model
 	cut datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
@@ -256,7 +256,7 @@ models/wikidata.reverted.general.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)'
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--label-type=bool > \
 	models/wikidata.reverted.general.rf.model
 
@@ -276,7 +276,7 @@ models/wikidata.reverted.general_and_context.rf.pretest.model: \
 		--label-type=bool > \
 	models/wikidata.reverted.general_and_context.rf.pretest.model
 
-models/wikidata.reverted.general_and_context.rf.model:
+models/wikidata.reverted.general_and_context.rf.model: \
 		models/wikidata.reverted.general_and_context.rf.pretest.model
 	cut datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
@@ -284,7 +284,7 @@ models/wikidata.reverted.general_and_context.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)'
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--label-type=bool > \
 	models/wikidata.reverted.general_and_context.rf.model
 
@@ -304,7 +304,7 @@ models/wikidata.reverted.general_context_and_type.rf.pretest.model: \
 		--label-type=bool > \
 	models/wikidata.reverted.general_context_and_type.rf.pretest.model
 
-models/wikidata.reverted.general_context_and_type.rf.model:
+models/wikidata.reverted.general_context_and_type.rf.model: \
 		models/wikidata.reverted.general_context_and_type.rf.pretest.model
 	cut datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
@@ -312,7 +312,7 @@ models/wikidata.reverted.general_context_and_type.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)'
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--label-type=bool > \
 	models/wikidata.reverted.general_context_and_type.rf.model
 
@@ -332,7 +332,7 @@ models/wikidata.reverted.general_and_user.rf.pretest.model: \
 		--label-type=bool > \
 	models/wikidata.reverted.general_and_user.rf.pretest.model
 
-models/wikidata.reverted.general_and_user.rf.model:
+models/wikidata.reverted.general_and_user.rf.model: \
 		models/wikidata.reverted.general_and_user.rf.pretest.model
 	cut datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
@@ -340,7 +340,7 @@ models/wikidata.reverted.general_and_user.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)'
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--label-type=bool > \
 	models/wikidata.reverted.general_and_user.rf.model
 
@@ -360,7 +360,7 @@ models/wikidata.reverted.all.rf.pretest.model: \
 		--label-type=bool > \
 	models/wikidata.reverted.all.rf.pretest.model
 
-models/wikidata.reverted.all.rf.model:
+models/wikidata.reverted.all.rf.model: \
 		models/wikidata.reverted.all.rf.pretest.model
 	cut datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv -f2- | \
 	revscoring test_model \
@@ -368,6 +368,6 @@ models/wikidata.reverted.all.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)'
+		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--label-type=bool > \
 	models/wikidata.reverted.all.rf.model
