@@ -150,55 +150,92 @@ datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv: \
 	shuf > \
 	datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv
 
-datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv:
-	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
-	revscoring extract_features \
-		wb_vandalism.feature_lists.experimental.general \
-		--host https://wikidata.org \
-		--include-revid \
-		--verbose > \
-	datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv
+datasets/wikidata.rev_reverted.nonbot.400k_2015.training.tsv: \
+		datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv
+	head -n 400000 datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv > \
+	datasets/wikidata.rev_reverted.nonbot.400k_2015.training.tsv
 
-datasets/wikidata.features_reverted.general_and_context.nonbot.500k_2015.tsv:
-	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
-	revscoring extract_features \
-		wb_vandalism.feature_lists.experimental.general_and_context \
-		--host https://wikidata.org \
-		--include-revid \
-		--verbose > \
-	datasets/wikidata.features_reverted.general_and_context.nonbot.500k_2015.tsv
+datasets/wikidata.rev_reverted.nonbot.100k_2015.testing.tsv: \
+		datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv
+		tail -n+400001 datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv > \
+		datasets/wikidata.rev_reverted.nonbot.100k_2015.testing.tsv
 
-datasets/wikidata.features_reverted.general_context_and_type.nonbot.500k_2015.tsv:
-	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
-	revscoring extract_features \
-		wb_vandalism.feature_lists.experimental.general_context_and_type \
-		--host https://wikidata.org \
-		--include-revid \
-		--verbose > \
-	datasets/wikidata.features_reverted.general_context_and_type.nonbot.500k_2015.tsv
-
-datasets/wikidata.features_reverted.general_and_user.nonbot.500k_2015.tsv:
-	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
-	revscoring extract_features \
-		wb_vandalism.feature_lists.experimental.general_and_user \
-		--host https://wikidata.org \
-		--include-revid \
-		--verbose > \
-	datasets/wikidata.features_reverted.general_and_user.nonbot.500k_2015.tsv
-
-datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv:
-	cat datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv | \
+datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv: \
+		datasets/wikidata.rev_reverted.nonbot.400k_2015.training.tsv
+	cat datasets/wikidata.rev_reverted.nonbot.400k_2015.training.tsv | \
 	revscoring extract_features \
 		wb_vandalism.feature_lists.experimental.all \
 		--host https://wikidata.org \
 		--include-revid \
 		--verbose > \
-	datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv
+	datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
 
-models/wikidata.reverted.general.rf.model: \
-		datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv
-	cut datasets/wikidata.features_reverted.general.nonbot.500k_2015.tsv -f2- | \
-	revscoring train_test \
+datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv: \
+		datasets/wikidata.rev_reverted.nonbot.100k_2015.testing.tsv
+	cat datasets/wikidata.rev_reverted.nonbot.100k_2015.testing.tsv | \
+	revscoring extract_features \
+		wb_vandalism.feature_lists.experimental.all \
+		--host https://wikidata.org \
+		--include-revid \
+		--verbose > \
+	datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
+
+# General
+datasets/wikidata.features_reverted.general.nonbot.400k_2015.training.tsv: \
+		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
+	cat datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv | \
+	cut -f1-33 > \
+	datasets/wikidata.features_reverted.general.nonbot.400k_2015.training.tsv
+
+datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv: \
+		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
+	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
+	cut -f1-33 > \
+	datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv
+
+# General and context
+datasets/wikidata.features_reverted.general_and_context.nonbot.400k_2015.training.tsv: \
+		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
+	cat datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv | \
+	cut -f1-47 > \
+	datasets/wikidata.features_reverted.general_and_context.nonbot.400k_2015.training.tsv
+
+datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv: \
+		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
+	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
+	cut -f1-47 > \
+	datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv
+
+# General, context and type
+datasets/wikidata.features_reverted.general_context_and_type.nonbot.400k_2015.training.tsv: \
+		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
+	cat datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv | \
+	cut -f1-54 > \
+	datasets/wikidata.features_reverted.general_context_and_type.nonbot.400k_2015.training.tsv
+
+datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv: \
+		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
+	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
+	cut -f1-54 > \
+	datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv
+
+# General and user
+datasets/wikidata.features_reverted.general_and_user.nonbot.400k_2015.training.tsv: \
+		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
+	cat datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv | \
+	cut -f1-33 > \
+	datasets/wikidata.features_reverted.general_and_user.nonbot.400k_2015.training.tsv
+
+datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv: \
+		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
+	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
+	cut -f1-33,55-60 > \
+	datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv
+
+models/wikidata.reverted.general.rf.pretest.model: \
+		datasets/wikidata.features_reverted.general.nonbot.400k_2015.training.tsv
+	cut datasets/wikidata.features_reverted.general.nonbot.400k_2015.training.tsv -f2- | \
+	revscoring train_model \
 		revscoring.scorer_models.RF \
 		wb_vandalism.feature_lists.experimental.general \
 		--version 0.0.1 \
@@ -206,19 +243,26 @@ models/wikidata.reverted.general.rf.model: \
 		-p 'criterion="entropy"' \
 		-p 'min_samples_leaf=1' \
 		-p 'n_estimators=80' \
-		-s 'pr' -s 'roc' \
-		-s 'recall_at_fpr(max_fpr=0.10)' \
-		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
+	models/wikidata.reverted.general.rf.pretest.model
+
+models/wikidata.reverted.general.rf.model:
+		models/wikidata.reverted.general.rf.pretest.model
+	cut datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv -f2- | \
+	revscoring test_model \
+		models/wikidata.reverted.general.rf.pretest.model \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' > \
 	models/wikidata.reverted.general.rf.model
 
-models/wikidata.reverted.general_and_context.rf.model: \
-		datasets/wikidata.features_reverted.general_and_context.nonbot.500k_2015.tsv
-	cut datasets/wikidata.features_reverted.general_and_context.nonbot.500k_2015.tsv -f2- | \
-	revscoring train_test \
+models/wikidata.reverted.general_and_context.rf.pretest.model: \
+		datasets/wikidata.features_reverted.general_and_context.nonbot.400k_2015.training.tsv
+	cut datasets/wikidata.features_reverted.general_and_context.nonbot.400k_2015.training.tsv -f2- | \
+	revscoring train_model \
 		revscoring.scorer_models.RF \
 		wb_vandalism.feature_lists.experimental.general_and_context \
 		--version 0.0.1 \
@@ -226,19 +270,26 @@ models/wikidata.reverted.general_and_context.rf.model: \
 		-p 'criterion="entropy"' \
 		-p 'min_samples_leaf=1' \
 		-p 'n_estimators=80' \
-		-s 'pr' -s 'roc' \
-		-s 'recall_at_fpr(max_fpr=0.10)' \
-		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
+	models/wikidata.reverted.general_and_context.rf.pretest.model
+
+models/wikidata.reverted.general_and_context.rf.model:
+		models/wikidata.reverted.general_and_context.rf.pretest.model
+	cut datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv -f2- | \
+	revscoring test_model \
+		models/wikidata.reverted.general_and_context.rf.pretest.model \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' > \
 	models/wikidata.reverted.general_and_context.rf.model
 
-models/wikidata.reverted.general_context_and_type.rf.model: \
-		datasets/wikidata.features_reverted.general_context_and_type.nonbot.500k_2015.tsv
-	cut datasets/wikidata.features_reverted.general_context_and_type.nonbot.500k_2015.tsv -f2- | \
-	revscoring train_test \
+models/wikidata.reverted.general_context_and_type.rf.pretest.model: \
+		datasets/wikidata.features_reverted.general_context_and_type.nonbot.400k_2015.training.tsv
+	cut datasets/wikidata.features_reverted.general_context_and_type.nonbot.400k_2015.training.tsv -f2- | \
+	revscoring train_model \
 		revscoring.scorer_models.RF \
 		wb_vandalism.feature_lists.experimental.general_context_and_type \
 		--version 0.0.1 \
@@ -246,19 +297,26 @@ models/wikidata.reverted.general_context_and_type.rf.model: \
 		-p 'criterion="entropy"' \
 		-p 'min_samples_leaf=1' \
 		-p 'n_estimators=80' \
-		-s 'pr' -s 'roc' \
-		-s 'recall_at_fpr(max_fpr=0.10)' \
-		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
+	models/wikidata.reverted.general_context_and_type.rf.pretest.model
+
+models/wikidata.reverted.general_context_and_type.rf.model:
+		models/wikidata.reverted.general_context_and_type.rf.pretest.model
+	cut datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv -f2- | \
+	revscoring test_model \
+		models/wikidata.reverted.general_context_and_type.rf.pretest.model \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' > \
 	models/wikidata.reverted.general_context_and_type.rf.model
 
-models/wikidata.reverted.general_and_user.rf.model: \
-		datasets/wikidata.features_reverted.general_and_user.nonbot.500k_2015.tsv
-	cut datasets/wikidata.features_reverted.general_and_user.nonbot.500k_2015.tsv -f2- | \
-	revscoring train_test \
+models/wikidata.reverted.general_and_user.rf.pretest.model: \
+		datasets/wikidata.features_reverted.general_and_user.nonbot.400k_2015.training.tsv
+	cut datasets/wikidata.features_reverted.general_and_user.nonbot.400k_2015.training.tsv -f2- | \
+	revscoring train_model \
 		revscoring.scorer_models.RF \
 		wb_vandalism.feature_lists.experimental.general_and_user \
 		--version 0.0.1 \
@@ -266,19 +324,26 @@ models/wikidata.reverted.general_and_user.rf.model: \
 		-p 'criterion="entropy"' \
 		-p 'min_samples_leaf=1' \
 		-p 'n_estimators=80' \
-		-s 'pr' -s 'roc' \
-		-s 'recall_at_fpr(max_fpr=0.10)' \
-		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
+	models/wikidata.reverted.general_and_user.rf.pretest.model
+
+models/wikidata.reverted.general_and_user.rf.model:
+		models/wikidata.reverted.general_and_user.rf.pretest.model
+	cut datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv -f2- | \
+	revscoring test_model \
+		models/wikidata.reverted.general_and_user.rf.pretest.model \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' > \
 	models/wikidata.reverted.general_and_user.rf.model
 
-models/wikidata.reverted.all.rf.model: \
-		datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv
-	cut datasets/wikidata.features_reverted.all.nonbot.500k_2015.tsv -f2- | \
-	revscoring train_test \
+models/wikidata.reverted.all.rf.pretest.model: \
+		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
+	cut datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv -f2- | \
+	revscoring train_model \
 		revscoring.scorer_models.RF \
 		wb_vandalism.feature_lists.experimental.all \
 		--version 0.0.1 \
@@ -286,11 +351,18 @@ models/wikidata.reverted.all.rf.model: \
 		-p 'criterion="entropy"' \
 		-p 'min_samples_leaf=1' \
 		-p 'n_estimators=80' \
-		-s 'pr' -s 'roc' \
-		-s 'recall_at_fpr(max_fpr=0.10)' \
-		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' \
 		--balance-sample-weight \
 		--center --scale \
 		--label-type=bool > \
+	models/wikidata.reverted.all.rf.pretest.model
+
+models/wikidata.reverted.all.rf.model:
+		models/wikidata.reverted.all.rf.pretest.model
+	cut datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv -f2- | \
+	revscoring test_model \
+		models/wikidata.reverted.all.rf.pretest.model \
+		-s 'pr' -s 'roc' \
+		-s 'recall_at_fpr(max_fpr=0.10)' \
+		-s 'filter_rate_at_recall(min_recall=0.90)' \
+		-s 'filter_rate_at_recall(min_recall=0.75)' > \
 	models/wikidata.reverted.all.rf.model
