@@ -256,7 +256,8 @@ models/wikidata.reverted.general.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' > \
+		-s 'filter_rate_at_recall(min_recall=0.75)'
+		--label-type=bool > \
 	models/wikidata.reverted.general.rf.model
 
 models/wikidata.reverted.general_and_context.rf.pretest.model: \
@@ -283,7 +284,8 @@ models/wikidata.reverted.general_and_context.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' > \
+		-s 'filter_rate_at_recall(min_recall=0.75)'
+		--label-type=bool > \
 	models/wikidata.reverted.general_and_context.rf.model
 
 models/wikidata.reverted.general_context_and_type.rf.pretest.model: \
@@ -310,7 +312,8 @@ models/wikidata.reverted.general_context_and_type.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' > \
+		-s 'filter_rate_at_recall(min_recall=0.75)'
+		--label-type=bool > \
 	models/wikidata.reverted.general_context_and_type.rf.model
 
 models/wikidata.reverted.general_and_user.rf.pretest.model: \
@@ -337,7 +340,8 @@ models/wikidata.reverted.general_and_user.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' > \
+		-s 'filter_rate_at_recall(min_recall=0.75)'
+		--label-type=bool > \
 	models/wikidata.reverted.general_and_user.rf.model
 
 models/wikidata.reverted.all.rf.pretest.model: \
@@ -364,5 +368,6 @@ models/wikidata.reverted.all.rf.model:
 		-s 'pr' -s 'roc' \
 		-s 'recall_at_fpr(max_fpr=0.10)' \
 		-s 'filter_rate_at_recall(min_recall=0.90)' \
-		-s 'filter_rate_at_recall(min_recall=0.75)' > \
+		-s 'filter_rate_at_recall(min_recall=0.75)'
+		--label-type=bool > \
 	models/wikidata.reverted.all.rf.model
