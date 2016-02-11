@@ -76,7 +76,8 @@ experimental_models: \
 	models/wikidata.reverted.general_and_context.rf.model \
 	models/wikidata.reverted.general_context_and_type.rf.model \
 	models/wikidata.reverted.general_and_user.rf.model \
-	models/wikidata.reverted.all.rf.model
+	models/wikidata.reverted.all.rf.model \
+	models/wikidata.reverted.all.gradient_boosting.model
 
 datasets/wikidatawiki.revision_sample.nonbot_user_edit_type.1m_2015.tsv: \
 		sql/revision_sample.nonbot_user_edit_type.1m_2015.sql
@@ -146,7 +147,7 @@ datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv: \
 	tail -n+2 datasets/wikidata.revision_sample.nonbot_with_exclusions.500k_2015.tsv | \
 	grep -v NULL | \
 	sed -r "s/([0-9]+)\t[a-Z_]+/\1\tFalse/" | \
-	cat datasets/wikidata.rev_reverted.nonbot.non_excluded.tsv - | \
+	cat datasets/wikidata.rev_reverted.nonbot.non_excluded.tsv - | tail -n+2 | \
 	shuf > \
 	datasets/wikidata.rev_reverted.nonbot.500k_2015.tsv
 
@@ -184,52 +185,52 @@ datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv: \
 datasets/wikidata.features_reverted.general.nonbot.400k_2015.training.tsv: \
 		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
 	cat datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv | \
-	cut -f1-33 > \
+	cut -f1-34,62 > \
 	datasets/wikidata.features_reverted.general.nonbot.400k_2015.training.tsv
 
 datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv: \
 		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
 	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
-	cut -f1-33 > \
+	cut -f1-34,62 > \
 	datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv
 
 # General and context
 datasets/wikidata.features_reverted.general_and_context.nonbot.400k_2015.training.tsv: \
 		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
 	cat datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv | \
-	cut -f1-47 > \
+	cut -f1-48,62 > \
 	datasets/wikidata.features_reverted.general_and_context.nonbot.400k_2015.training.tsv
 
 datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv: \
 		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
 	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
-	cut -f1-47 > \
+	cut -f1-48,62 > \
 	datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv
 
 # General, context and type
 datasets/wikidata.features_reverted.general_context_and_type.nonbot.400k_2015.training.tsv: \
 		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
 	cat datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv | \
-	cut -f1-54 > \
+	cut -f1-55,62 > \
 	datasets/wikidata.features_reverted.general_context_and_type.nonbot.400k_2015.training.tsv
 
 datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv: \
 		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
 	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
-	cut -f1-54 > \
+	cut -f1-55,62 > \
 	datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv
 
 # General and user
 datasets/wikidata.features_reverted.general_and_user.nonbot.400k_2015.training.tsv: \
 		datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv
 	cat datasets/wikidata.features_reverted.all.nonbot.400k_2015.training.tsv | \
-	cut -f1-33 > \
+	cut -f1-34,56-61,62 > \
 	datasets/wikidata.features_reverted.general_and_user.nonbot.400k_2015.training.tsv
 
 datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv: \
 		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv
 	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
-	cut -f1-33,55-60 > \
+	cut -f1-34,56-61,62 > \
 	datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv
 
 models/wikidata.reverted.general.rf.pretest.model: \
@@ -411,40 +412,53 @@ experimental_test_scores: \
 	datasets/wikidata.reverted.general_and_context.rf.test_scores.tsv \
 	datasets/wikidata.reverted.general_context_and_type.rf.test_scores.tsv \
 	datasets/wikidata.reverted.general_and_user.rf.test_scores.tsv \
+	datasets/wikidata.reverted.all.rf.test_scores.tsv \
 	datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv
 
 datasets/wikidata.reverted.general.rf.test_scores.tsv: \
-		cat datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv | \
-		python wb_vandalism/test_scores.py \
-			models/wikidata.reverted.general.rf.model >
-		datasets/wikidata.reverted.general.rf.test_scores.tsv
+		datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv \
+		models/wikidata.reverted.general.rf.model
+	cat datasets/wikidata.features_reverted.general.nonbot.100k_2015.testing.tsv | \
+	python wb_vandalism/test_scores.py \
+		models/wikidata.reverted.general.rf.model > \
+	datasets/wikidata.reverted.general.rf.test_scores.tsv
 
 datasets/wikidata.reverted.general_and_context.rf.test_scores.tsv: \
-		cat datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv | \
-		python wb_vandalism/test_scores.py \
-			models/wikidata.reverted.general_and_context.rf.model >
-		datasets/wikidata.reverted.general_and_context.rf.test_scores.tsv
+		datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv \
+		models/wikidata.reverted.general_and_context.rf.model
+	cat datasets/wikidata.features_reverted.general_and_context.nonbot.100k_2015.testing.tsv | \
+	python wb_vandalism/test_scores.py \
+		models/wikidata.reverted.general_and_context.rf.model > \
+	datasets/wikidata.reverted.general_and_context.rf.test_scores.tsv
 
 datasets/wikidata.reverted.general_context_and_type.rf.test_scores.tsv: \
-		cat datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv | \
-		python wb_vandalism/test_scores.py \
-			models/wikidata.reverted.general_context_and_type.rf.model >
-		datasets/wikidata.reverted.general_context_and_type.rf.test_scores.tsv
+		datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv \
+		models/wikidata.reverted.general_context_and_type.rf.model
+	cat datasets/wikidata.features_reverted.general_context_and_type.nonbot.100k_2015.testing.tsv | \
+	python wb_vandalism/test_scores.py \
+		models/wikidata.reverted.general_context_and_type.rf.model > \
+	datasets/wikidata.reverted.general_context_and_type.rf.test_scores.tsv
 
 datasets/wikidata.reverted.general_and_user.rf.test_scores.tsv: \
-		cat datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv | \
-		python wb_vandalism/test_scores.py \
-			models/wikidata.reverted.general_and_user.rf.model >
-		datasets/wikidata.reverted.general_and_user.rf.test_scores.tsv
+		datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv \
+		models/wikidata.reverted.general_and_user.rf.model
+	cat datasets/wikidata.features_reverted.general_and_user.nonbot.100k_2015.testing.tsv | \
+	python wb_vandalism/test_scores.py \
+		models/wikidata.reverted.general_and_user.rf.model > \
+	datasets/wikidata.reverted.general_and_user.rf.test_scores.tsv
 
 datasets/wikidata.reverted.all.rf.test_scores.tsv: \
-		cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
-		python wb_vandalism/test_scores.py \
-			models/wikidata.reverted.all.rf.model >
-		datasets/wikidata.reverted.all.rf.test_scores.tsv
+		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv \
+		models/wikidata.reverted.all.rf.model
+	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
+	python wb_vandalism/test_scores.py \
+		models/wikidata.reverted.all.rf.model > \
+	datasets/wikidata.reverted.all.rf.test_scores.tsv
 
 datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv: \
-		cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
-		python wb_vandalism/test_scores.py \
-			models/wikidata.reverted.all.gradient_boosting.model >
-		datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv
+		datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv \
+		models/wikidata.reverted.all.gradient_boosting.model
+	cat datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv | \
+	python wb_vandalism/test_scores.py \
+		models/wikidata.reverted.all.gradient_boosting.model > \
+	datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv
