@@ -462,3 +462,25 @@ datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv: \
 	python wb_vandalism/test_scores.py \
 		models/wikidata.reverted.all.gradient_boosting.model > \
 	datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv
+
+datasets/wikidata.reverted.experimental_models.test_scores.tsv: \
+		datasets/wikidata.reverted.general.rf.test_scores.tsv \
+		datasets/wikidata.reverted.general_and_context.rf.test_scores.tsv \
+		datasets/wikidata.reverted.general_context_and_type.rf.test_scores.tsv \
+		datasets/wikidata.reverted.general_and_user.rf.test_scores.tsv \
+		datasets/wikidata.reverted.all.rf.test_scores.tsv \
+		datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv
+	(
+		echo -e "rev_id\tgeneral\tgeneral_and_context\tgeneral_context_and_type\tgeneral_and_user\tall\tall_gb\treverted";
+		(echo "label"; \
+		 cut datasets/wikidata.features_reverted.all.nonbot.100k_2015.testing.tsv -f 62) |  \
+		paste \
+			datasets/wikidata.reverted.general.rf.test_scores.tsv \
+			datasets/wikidata.reverted.general_and_context.rf.test_scores.tsv \
+			datasets/wikidata.reverted.general_context_and_type.rf.test_scores.tsv \
+			datasets/wikidata.reverted.general_and_user.rf.test_scores.tsv \
+			datasets/wikidata.reverted.all.rf.test_scores.tsv \
+			datasets/wikidata.reverted.all.gradient_boosting.test_scores.tsv - | \
+			cut -f1,2,4,6,8,10,12,13 | tail -n+2\
+	) > \
+	datasets/wikidata.reverted.experimental_models.test_scores.tsv
