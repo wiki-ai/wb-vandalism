@@ -12,22 +12,24 @@ score_stats = function(score, reverted){
     }else{
         thresholds = unique(score)
     }
-    thresholds = c(thresholds, thresholds+0.0001)
+    thresholds = unique(c(thresholds, quantile(score, seq(0, 1, 0.01))))
 
     rows = lapply(
         thresholds,
         function(threshold){
             predicted = score >= threshold
-            reverted = reverted
             correct = sum(predicted == reverted)
             true_positives = sum(predicted & reverted)
+            false_positives = sum(predicted & !reverted)
 
             data.table(
                 score = threshold,
                 accuracy = correct / length(predicted),
                 precision = true_positives / sum(predicted),
                 recall = true_positives / sum(reverted),
-                filter_rate = 1 - (sum(predicted) / length(predicted))
+                filter_rate = 1 - (sum(predicted) / length(predicted)),
+                fpr = false_positives / sum(!reverted),
+                tpr = true_positives / sum(reverted)
             )
         }
     )
@@ -73,7 +75,7 @@ theme_bw() +
 geom_abline(slope=-1, intercept=1, color="#BBBBBB", linetype=2) +
 geom_line() +
 scale_x_continuous("recall") +
-scale_y_continuous("precision")
+scale_y_continuous("precision", limits=c(0, 1))
 dev.off()
 
 svg("curves/plots/wikidata.reverted.precision_recall.general_user_all.svg",
@@ -88,7 +90,42 @@ theme_bw() +
 geom_abline(slope=-1, intercept=1, color="#BBBBBB", linetype=2) +
 geom_line() +
 scale_x_continuous("recall") +
-scale_y_continuous("precision")
+scale_y_continuous("precision", limits=c(0, 1))
+dev.off()
+
+
+
+# ROC
+svg("curves/plots/wikidata.reverted.roc.general_context_type.svg",
+    height=5, width=7)
+ggplot(
+    score_stat_groups[
+        feature_set %in% c("general", "general_and_context",
+                           "general_context_and_type"),
+    ],
+    aes(x=fpr, y=tpr, group=feature_set, linetype=feature_set)
+) +
+theme_bw() +
+geom_abline(slope=1, intercept=0, color="#BBBBBB", linetype=2) +
+geom_line() +
+scale_x_continuous("False-positive rate") +
+scale_y_continuous("True-positive rate")
+dev.off()
+
+
+svg("curves/plots/wikidata.reverted.roc.general_user_all.svg",
+    height=5, width=7)
+ggplot(
+    score_stat_groups[
+        feature_set %in% c("general_and_user", "all"),
+    ],
+    aes(x=fpr, y=tpr, group=feature_set, linetype=feature_set)
+) +
+theme_bw() +
+geom_abline(slope=1, intercept=0, color="#BBBBBB", linetype=2) +
+geom_line() +
+scale_x_continuous("False-positive rate") +
+scale_y_continuous("True-positive rate")
 dev.off()
 
 # Filter-rate/recall
@@ -105,7 +142,7 @@ theme_bw() +
 geom_vline(xintercept=0.90, color="#BBBBBB", linetype=2) +
 geom_line() +
 scale_x_continuous("recall") +
-scale_y_continuous("filter-rate")
+scale_y_continuous("filter-rate", limits=c(0, 1))
 dev.off()
 
 
@@ -121,5 +158,5 @@ theme_bw() +
 geom_vline(xintercept=0.90, color="#BBBBBB", linetype=2) +
 geom_line() +
 scale_x_continuous("recall") +
-scale_y_continuous("filter-rate")
+scale_y_continuous("filter-rate", limits=c(0, 1))
 dev.off()
