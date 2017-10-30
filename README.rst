@@ -5,6 +5,8 @@
     :target: http://codecov.io/github/wiki-ai/wb-vandalism?branch=master
 
 **THIS REPO IS DEPRICATED PLEASE DO NOT USE THIS REPO**
+
+
 wb-wandalism: Wikidata anti-vandalism system
 ============================================
 This library provides a set of utilities for building and maintaining
